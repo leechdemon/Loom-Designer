@@ -9,8 +9,10 @@
         #loom { width: 100%; }
     }
 
-    .colorSelectorFrame { background-color: #dddddd; position: relative; float: left; margin-right: 8px; margin-bottom: 8px; padding: 12px; }
-    .colorSelector { float: left; border: solid 1px black; width: 75px; height: 75px; margin: 0px 5px 5px 0px; }
+    .colorSelectorFrame { position: relative; float: left; padding: 8px; }
+    .colorSelectorFrame button:has( + p.item_oos ) { border: solid 5px red; }
+    #colorSelectorFrame_oos { float: left; background-color: #ff000033; padding: 8px; margin-top: 8px; border: solid 2px red; }
+    .colorSelector { float: left; border: solid 1px black; width: 70px; height: 70px; margin: 0px 5px 5px 0px; }
     .colorSelectorItem { position: relative; float: left; border: solid 1px black; width: calc((100% / 8) - 5px); height: 20px; margin-right: 5px; }
     .labelHide { display: none; top: 26px; left: -100%; z-index: 10; }
     .colorSelectorItem:hover > .labelHide { display: block; color: black; display: block; position: absolute; left: 0; border: solid 1px black; padding: 5px 10px; border-radius: 5rem; background-color: white; }
@@ -36,6 +38,8 @@
 <div id="loomWrapper">
     <div id="loomControls">
         <div id="colorSelectorFrames"></div>
+        <div id="colorSelectorFrame_oos">Some items may be out of stock, and will not be added to your cart.</div>
+      
         <div class="buttonRow">
           <button id="" class="btn btn--small" onclick="javascript:AddNewColorFrame();" style="background-color: #ed7b5a">Add Color</button>
         </div>
@@ -249,258 +253,25 @@
       }
     }
     function AddLoomToCart() {
-      // Gather Hex codes of all colors in use
-      var selectedColors = [];
-      var hexColors = [];
+      var productList = [];      
 
-
-      var allLoomItems = document.getElementsByClassName('loomItem');
-      for( c = 0; (c < allLoomItems.length-1); c++ ) { 
-        if(allLoomItems[c].innerHTML == "|" || allLoomItems[c].innerHTML == "—" ) {
-          if( allLoomItems[c].style.backgroundColor ) {
-            selectedColors.push(allLoomItems[c].style.backgroundColor);
-          }
-        } 
-      }
-      var uniqueColors = selectedColors.filter(onlyUnique);
-
-      for( c = 0; c < uniqueColors.length; c++ ) {
-        uniqueColors[c] = uniqueColors[c].split("(")[1].split(")")[0].split(", ");
-        var thisColor = "";
-        for( item = 0; item < 3; item++) {
-          thisColor += uniqueColors[c][item] = parseInt( uniqueColors[c][item] ).toString(16);
-        }
-        hexColors.push(thisColor);
-      }
-
-      var productList = [];
-      // Use Hex to determine correct product variants from list
-      for( c = 0; c < hexColors.length; c++) {
-        switch( true ) {
-          //7" Loom
-          case (loomSize == 18) && (hexColors[c] == "887255"):
-            productList.push("39980044451915");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "213996"):
-            productList.push("39980044517451");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "38383a"):
-            productList.push("39980044615755");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "532025"):
-            productList.push("39980044681291");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "f57b99"):
-            productList.push("39980044714059");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "fbed94"):
-            productList.push("39980044746827");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "3c1d14"):
-            productList.push("39980044845131");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "1c233e"):
-            productList.push("39980044943435");
-            break;
-
-          case (loomSize == 18) && (hexColors[c] == "d7c8a9"):
-            productList.push("39980045008971");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "0e6f2e"):
-            productList.push("39980045041739");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "b194c3"):
-            productList.push("39980045140043");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "b0d947"):
-            productList.push("39980045205579");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "859855"):
-            productList.push("39980045271115");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "9a86b8"):
-            productList.push("39980045303883");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "d74d21"):
-            productList.push("39980045631563");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "775d2d"):
-            productList.push("39980045434955");
-            break;
-
-          case (loomSize == 18) && (hexColors[c] == "4d1e96"):
-            productList.push("39980045926475");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "92b6cb"):
-            productList.push("39980045992011");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "04897f"):
-            productList.push("39980046024779");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "8c2f9a"):
-            productList.push("39980046221387");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "04322c"):
-            productList.push("39980046319691");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "f840ab"):
-            productList.push("39980046090315");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "53545a"):
-            productList.push("39980046352459");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "971524"):
-            productList.push("39980046385227");
-            break;
-
-          case (loomSize == 18) && (hexColors[c] == "5ba9c4"):
-            productList.push("39980046417995");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "e95f5f"):
-            productList.push("39980046483531");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "984e38"):
-            productList.push("39980046516299");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "a5a5a8"):
-            productList.push("39980046549067");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "06a0cd"):
-            productList.push("39980046581835");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "e1723b"):
-            productList.push("39980046581835");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "e5e7ea"):
-            productList.push("39980046712907");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "445041"):
-            productList.push("39980046745675");
-            break;
-
-          case (loomSize == 18) && (hexColors[c] == "fdf5e9"):
-            productList.push("39980046811211");
-            break;
-          case (loomSize == 18) && (hexColors[c] == "f3b814"):
-            productList.push("39980046843979");
-            break;
-
-          // 10" Loom
-          case (loomSize == 27) && (hexColors[c] == "887255"):
-            productList.push("32648134099019");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "213996"):
-            productList.push("32648133738571");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "38383a"):
-            productList.push("32648134754379");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "532025"):
-            productList.push("32648134164555");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "f57b99"):
-            productList.push("32648134688843");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "fbed94"):
-            productList.push("32648134590539");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "3c1d14"):
-            productList.push("32648134295627");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "1c233e"):
-            productList.push("32648134230091");
-            break;
-
-          case (loomSize == 27) && (hexColors[c] == "d7c8a9"):
-            productList.push("32648134361163");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "0e6f2e"):
-            productList.push("32648133836875");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "b194c3"):
-            productList.push("32648134459467");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "b0d947"):
-            productList.push("32648133869643");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "859855"):
-            productList.push("32648134492235");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "9a86b8"):
-            productList.push("32648134525003");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "d74d21"):
-            productList.push("32648133935179");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "775d2d"):
-            productList.push("32648134328395");
-            break;
-
-          case (loomSize == 27) && (hexColors[c] == "4d1e96"):
-            productList.push("32648133673035");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "92b6cb"):
-            productList.push("32648134721611");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "04897f"):
-            productList.push("32648133804107");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "8c2f9a"):
-            productList.push("32648133705803");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "04322c"):
-            productList.push("32648134426699");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "f840ab"):
-            productList.push("32648134000715");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "53545a"):
-            productList.push("32648134262859");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "971524"):
-            productList.push("32648133967947");
-            break;
-
-          case (loomSize == 27) && (hexColors[c] == "5ba9c4"):
-            productList.push("32648134557771");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "e95f5f"):
-            productList.push("32648134033483");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "984e38"):
-            productList.push("32648134393931");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "a5a5a8"):
-            productList.push("32648134066251");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "06a0cd"):
-            productList.push("32648133771339");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "e1723b"):
-            productList.push("32648134623307");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "e5e7ea"):
-            productList.push("32648134656075");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "445041"):
-            productList.push("32648134131787");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "fdf5e9"):
-            productList.push("32648134197323");
-            break;
-          case (loomSize == 27) && (hexColors[c] == "f3b814"):
-            productList.push("32648133902411");
-            break;
+      /* Select all colors from the ColorSelectorFrames */
+      var allColorSelectorFrames  = document.getElementsByClassName('colorSelectorFrame ');
+      for( c = 0; c < allColorSelectorFrames.length; c++ ) { 
+        if( allColorSelectorFrames[c].firstChild.style.backgroundColor ) {
+          productList.push( GetProductIdFromRGB( allColorSelectorFrames[c].firstChild.style.backgroundColor ) );
         }
       }
-
+      
       var url = '/cart/add?';
       for( p = 0; p < productList.length; p++ ) {
         if(p > 0) { url+= "&"; }
         url += 'id[]='+productList[p]+'&quantity=1';
       }
-
-      window.open(url,"_self");
+      console.log('productList', productList);
+      console.log('url', url);
+      
+      // window.open(url,"_self");
     }
     function AssignLoomColors(assign) {
         var loomRows = document.getElementsByClassName('loomRow');
@@ -574,18 +345,43 @@
           patternIndex++;
         }
     }
+    function CheckShopifyInventory() {
+      // var productId = '39980046024779';
+      var productList = [];
+      
+      var allColorSelectorItems = document.getElementsByClassName('colorSelectorItem');
+      for( var x = 0; x < allColorSelectorItems.length; x++ ) {
+        productList.push( GetProductIdFromRGB( allColorSelectorItems[x].style.backgroundColor ) );
+      }
+      console.log(productList);
+    }
     function CountStitches() {
+      var anythingOos = false;
       for(var x = 1; x <= document.getElementById('colorSelectorFrames').children.length; x++) {
         var colorGroup = document.getElementsByClassName('color-' + x);
         var stitches = 0;
-        console.log(colorGroup.length);
+		  
         for(var y = 0; y < colorGroup.length; y++) {
           if( colorGroup[y].classList.contains("loomItem") ) {
             stitches++;
           }
         }
-        document.getElementById('stitchCount-' + x).innerHTML = stitches + " stitches";
+
+        var stitchCountDiv = document.getElementById('stitchCount-' + x);
+        stitchCountDiv.innerHTML = stitches + " stitches";
+
+        var stitchesPerUnit = 160;
+        if(stitches < stitchesPerUnit) {
+          anythingOos = true;
+          stitchCountDiv.classList.add('item_oos');
+        }
+        if( stitches > stitchesPerUnit ) {
+          stitchCountDiv.classList.remove('item_oos');
+        }
       }
+
+      if( anythingOos ) { document.getElementById('colorSelectorFrame_oos').style.display = 'block'; }
+      else { document.getElementById('colorSelectorFrame_oos').style.display = 'none'; }
     }
     function CreateLoom() {  // Never call this directly, or you miss Event Handlers
         var loom = document.getElementById('loom');
@@ -636,6 +432,243 @@
 
             loom.appendChild(loomRow);
         }
+    }
+    function GetProductIdFromRGB(rgb) {
+      var id = "";
+      var hexColor = '';
+      
+      rgb = rgb.split("(")[1].split(")")[0].split(", ");
+      
+      for( item = 0; item < 3; item++) {
+        /* calculate RGB */
+        hexColor += parseInt( rgb[item] ).toString(16);
+
+        /* fix "leading 0's" in hex conversion */
+        if(hexColor.length == 1) {
+          hexColor = '0' + hexColor;
+        }
+      }
+      
+      // Use Hex to determine correct product variants
+      switch( true ) {
+        //7" Loom
+        case (loomSize == 18) && (hexColor == "887255"):
+          id = "39980044451915";
+          break;
+        case (loomSize == 18) && (hexColor == "213996"):
+          id = "39980044517451";
+          break;
+        case (loomSize == 18) && (hexColor == "38383a"):
+          id = "39980044615755";
+          break;
+        case (loomSize == 18) && (hexColor == "532025"):
+          id = "39980044681291";
+          break;
+        case (loomSize == 18) && (hexColor == "f57b99"):
+          id = "39980044714059";
+          break;
+        case (loomSize == 18) && (hexColor == "fbed94"):
+          id = "39980044746827";
+          break;
+        case (loomSize == 18) && (hexColor == "3c1d14"):
+          id = "39980044845131";
+          break;
+        case (loomSize == 18) && (hexColor == "1c233e"):
+          id = "39980044943435";
+          break;
+
+        case (loomSize == 18) && (hexColor == "d7c8a9"):
+          id = "39980045008971";
+          break;
+        case (loomSize == 18) && (hexColor == "0e6f2e"):
+          id = "39980045041739";
+          break;
+        case (loomSize == 18) && (hexColor == "b194c3"):
+          id = "39980045140043";
+          break;
+        case (loomSize == 18) && (hexColor == "b0d947"):
+          id = "39980045205579";
+          break;
+        case (loomSize == 18) && (hexColor == "859855"):
+          id = "39980045271115";
+          break;
+        case (loomSize == 18) && (hexColor == "9a86b8"):
+          id = "39980045303883";
+          break;
+        case (loomSize == 18) && (hexColor == "d74d21"):
+          id = "39980045631563";
+          break;
+        case (loomSize == 18) && (hexColor == "775d2d"):
+          id = "39980045434955";
+          break;
+
+        case (loomSize == 18) && (hexColor == "4d1e96"):
+          id = "39980045926475";
+          break;
+        case (loomSize == 18) && (hexColor == "92b6cb"):
+          id = "39980045992011";
+          break;
+        case (loomSize == 18) && (hexColor == "04897f"):
+          id = "39980046024779";
+          break;
+        case (loomSize == 18) && (hexColor == "8c2f9a"):
+          id = "39980046221387";
+          break;
+        case (loomSize == 18) && (hexColor == "04322c"):
+          id = "39980046319691";
+          break;
+        case (loomSize == 18) && (hexColor == "f840ab"):
+          id = "39980046090315";
+          break;
+        case (loomSize == 18) && (hexColor == "53545a"):
+          id = "39980046352459";
+          break;
+        case (loomSize == 18) && (hexColor == "971524"):
+          id = "39980046385227";
+          break;
+
+        case (loomSize == 18) && (hexColor == "5ba9c4"):
+          id = "39980046417995";
+          break;
+        case (loomSize == 18) && (hexColor == "e95f5f"):
+          id = "39980046483531";
+          break;
+        case (loomSize == 18) && (hexColor == "984e38"):
+          id = "39980046516299";
+          break;
+        case (loomSize == 18) && (hexColor == "a5a5a8"):
+          id = "39980046549067";
+          break;
+        case (loomSize == 18) && (hexColor == "06a0cd"):
+          id = "39980046581835";
+          break;
+        case (loomSize == 18) && (hexColor == "e1723b"):
+          id = "39980046581835";
+          break;
+        case (loomSize == 18) && (hexColor == "e5e7ea"):
+          id = "39980046712907";
+          break;
+        case (loomSize == 18) && (hexColor == "445041"):
+          id = "39980046745675";
+          break;
+
+        case (loomSize == 18) && (hexColor == "fdf5e9"):
+          id = "39980046811211";
+          break;
+        case (loomSize == 18) && (hexColor == "f3b814"):
+          id = "39980046843979";
+          break;
+
+        // 10" Loom
+        case (loomSize == 27) && (hexColor == "887255"):
+          id = "32648134099019";
+          break;
+        case (loomSize == 27) && (hexColor == "213996"):
+          id = "32648133738571";
+          break;
+        case (loomSize == 27) && (hexColor == "38383a"):
+          id = "32648134754379";
+          break;
+        case (loomSize == 27) && (hexColor == "532025"):
+          id = "32648134164555";
+          break;
+        case (loomSize == 27) && (hexColor == "f57b99"):
+          id = "32648134688843";
+          break;
+        case (loomSize == 27) && (hexColor == "fbed94"):
+          id = "32648134590539";
+          break;
+        case (loomSize == 27) && (hexColor == "3c1d14"):
+          id = "32648134295627";
+          break;
+        case (loomSize == 27) && (hexColor == "1c233e"):
+          id = "32648134230091";
+          break;
+
+        case (loomSize == 27) && (hexColor == "d7c8a9"):
+          id = "32648134361163";
+          break;
+        case (loomSize == 27) && (hexColor == "0e6f2e"):
+          id = "32648133836875";
+          break;
+        case (loomSize == 27) && (hexColor == "b194c3"):
+          id = "32648134459467";
+          break;
+        case (loomSize == 27) && (hexColor == "b0d947"):
+          id = "32648133869643";
+          break;
+        case (loomSize == 27) && (hexColor == "859855"):
+          id = "32648134492235";
+          break;
+        case (loomSize == 27) && (hexColor == "9a86b8"):
+          id = "32648134525003";
+          break;
+        case (loomSize == 27) && (hexColor == "d74d21"):
+          id = "32648133935179";
+          break;
+        case (loomSize == 27) && (hexColor == "775d2d"):
+          id = "32648134328395";
+          break;
+
+        case (loomSize == 27) && (hexColor == "4d1e96"):
+          id = "32648133673035";
+          break;
+        case (loomSize == 27) && (hexColor == "92b6cb"):
+          id = "32648134721611";
+          break;
+        case (loomSize == 27) && (hexColor == "04897f"):
+          id = "32648133804107";
+          break;
+        case (loomSize == 27) && (hexColor == "8c2f9a"):
+          id = "32648133705803";
+          break;
+        case (loomSize == 27) && (hexColor == "04322c"):
+          id = "32648134426699";
+          break;
+        case (loomSize == 27) && (hexColor == "f840ab"):
+          id = "32648134000715";
+          break;
+        case (loomSize == 27) && (hexColor == "53545a"):
+          id = "32648134262859";
+          break;
+        case (loomSize == 27) && (hexColor == "971524"):
+          id = "32648133967947";
+          break;
+
+        case (loomSize == 27) && (hexColor == "5ba9c4"):
+          id = "32648134557771";
+          break;
+        case (loomSize == 27) && (hexColor == "e95f5f"):
+          id = "32648134033483";
+          break;
+        case (loomSize == 27) && (hexColor == "984e38"):
+          id = "32648134393931";
+          break;
+        case (loomSize == 27) && (hexColor == "a5a5a8"):
+          id = "32648134066251";
+          break;
+        case (loomSize == 27) && (hexColor == "06a0cd"):
+          id = "32648133771339";
+          break;
+        case (loomSize == 27) && (hexColor == "e1723b"):
+          id = "32648134623307";
+          break;
+        case (loomSize == 27) && (hexColor == "e5e7ea"):
+          id = "32648134656075";
+          break;
+        case (loomSize == 27) && (hexColor == "445041"):
+          id = "32648134131787";
+          break;
+          
+        case (loomSize == 27) && (hexColor == "fdf5e9"):
+          id = "32648134197323";
+          break;
+        case (loomSize == 27) && (hexColor == "f3b814"):
+          id = "32648133902411";
+          break;
+      }
+      
+      return id;
     }
     function LoomSize(size) {
         loomSize = size;
@@ -719,7 +752,6 @@
       CountStitches();
     }
     function RedrawLoom(assign) { // Use this for changes/refreshes
-      console.log('RedrawLoom()');
         SelectPattern();
         CreateLoom();
         AssignLoomColors(assign);
@@ -922,5 +954,6 @@
     function onlyUnique(value, index, array) { return array.indexOf(value) === index; }
 
     RedrawLoom(true);
+    CheckShopifyInventory();
     document.getElementById('colorSelector1').click();
 </script>
