@@ -10,8 +10,12 @@
     }
 
     .colorSelectorFrame { position: relative; float: left; padding: 8px; }
-    .colorSelectorFrame button:has( + p.item_oos ) { border: solid 5px red; }
+  
+    /* .colorSelectorFrame.item_instock button, .colorSelectorItem.item_instock { border: solid 5px green; } */
+    .colorSelectorFrame.item_oos button, .colorSelectorItem.item_oos { border: solid 5px red; }
+    .colorSelectorFrame.item_unchecked button, .colorSelectorItem.item_unchecked { border: solid 5px blue; }
     #colorSelectorFrame_oos { float: left; background-color: #ff000033; padding: 8px; margin-top: 8px; border: solid 2px red; }
+
     .colorSelector { float: left; border: solid 1px black; width: 70px; height: 70px; margin: 0px 5px 5px 0px; }
     .colorSelectorItem { position: relative; float: left; border: solid 1px black; width: calc((100% / 8) - 5px); height: 20px; margin-right: 5px; }
     .labelHide { display: none; top: 26px; left: -100%; z-index: 10; }
@@ -232,7 +236,17 @@
     var loomSize = 18;
     var assignmentPattern = {};
     var colorAssignment = [];
+
+    /* Build Product Object */
+    var productTitle7 = 'traditional-potholder-refill-loop-bags';
+    var productTitle10 = 'pro-potholder-refill-loops';
     
+    // var productId = 'pro-potholder-refill-loops';
+    // var productList = [];
+    // productList.push( productId );
+
+    CheckShopifyInventory();
+  
     function AddColorFrame(index) {
       var colorSelectorFrame = document.createElement('div');
       colorSelectorFrame.id = 'colorSelectorFrame' + index;
@@ -346,38 +360,111 @@
         }
     }
     function CheckShopifyInventory() {
-      // var productId = '39980046024779';
-      var productList = [];
+      var productTitle = 'blank';
+      if( loomSize == 18 ) { productTitle = productTitle7; }
+      if( loomSize == 27 ) { productTitle = productTitle10; }
+
+      fetch(window.Shopify.routes.root + 'products/'+productTitle+'.js')
+        .then( response => response.json())
+        .then(json => CheckShopifyInventory_Callback( json ) );
+    }
+    function CheckShopifyInventory_Callback( sourceProduct ) {
+      var product = sourceProduct;
+      var countIt = 0;
       
       var allColorSelectorItems = document.getElementsByClassName('colorSelectorItem');
       for( var x = 0; x < allColorSelectorItems.length; x++ ) {
-        productList.push( GetProductIdFromRGB( allColorSelectorItems[x].style.backgroundColor ) );
+        /* Clear previous OOS classes */
+        allColorSelectorItems[x].classList.remove('item_oos');
+        allColorSelectorItems[x].classList.remove('item_instock');
+        allColorSelectorItems[x].classList.add('item_unchecked');
+
+        /* For each colorSelectorItem swatch, get the productId */
+        var thisProductId = GetProductIdFromRGB( allColorSelectorItems[x].style.backgroundColor );
+        
+        // console.log('product',product);
+        /* For each product, if the productId matches the current Div's productId... */
+        for( var v = 0; v < product.variants.length; v++ ) {
+          countIt++;
+          // console.log( countIt );
+          // console.log( 'product.variants[v].id',product.variants[v].id );
+          // console.log('thisProductId',thisProductId);
+          
+          if(product.variants[v].id == thisProductId) {
+            /* Check inventory */
+            if( product.variants[v].available ) {
+              // console.log(product.variants[v].title);
+              // console.log('AVAILABLE', product.variants[v].available);
+              allColorSelectorItems[x].classList.add('item_instock');
+            }
+            else {
+              // console.log(product.variants[v].title);
+              // console.log('AVAILABLE', product.variants[v].available);
+              allColorSelectorItems[x].classList.add('item_oos');
+            }
+            
+            /* If it's a match, remove it from the list so we don't check it against future frames. */
+            product.variants.splice(v, 1);
+            allColorSelectorItems[x].classList.remove('item_unchecked');
+            break;
+          }
+        }
       }
-      console.log(productList);
     }
     function CountStitches() {
       var anythingOos = false;
-      for(var x = 1; x <= document.getElementById('colorSelectorFrames').children.length; x++) {
-        var colorGroup = document.getElementsByClassName('color-' + x);
+      /* For each colorSelectorFrame in use... */
+      var colorSelectorFrames = document.getElementsByClassName('colorSelectorFrame');
+      for(var x = 0; x < colorSelectorFrames.length; x++ ) {
+        var colorGroup = document.getElementsByClassName('color-' + (x+1) );
         var stitches = 0;
-		  
+
         for(var y = 0; y < colorGroup.length; y++) {
           if( colorGroup[y].classList.contains("loomItem") ) {
             stitches++;
           }
         }
 
-        var stitchCountDiv = document.getElementById('stitchCount-' + x);
+        var stitchCountDiv = document.getElementById('stitchCount-' + (x+1) );
         stitchCountDiv.innerHTML = stitches + " stitches";
 
-        var stitchesPerUnit = 160;
-        if(stitches < stitchesPerUnit) {
-          anythingOos = true;
-          stitchCountDiv.classList.add('item_oos');
+        // var stitchesPerUnit = 160;
+        // if(stitches < stitchesPerUnit) {
+
+        colorSelectorFrames[x].classList.remove('item_instock', 'item_oos', 'item_unchecked');
+        
+        /* Compare the current color frame to all colorSelectorItems by color */
+        var frameColor = colorSelectorFrames[x].firstChild.style.backgroundColor;
+        var colorSelectorItems = document.getElementsByClassName('colorSelectorItem');
+        for( var c = 0; c < colorSelectorItems.length; c++ ) {
+          if( colorSelectorItems[c].style.backgroundColor == frameColor ) {
+            /* If the colorSelectorItem matches the frameColor... */
+            console.log('colorSelectorItems[c].classList',colorSelectorItems[c].classList);
+
+            for(var cl = 0; cl < colorSelectorItems[c].classList.length; cl++ ) {
+              console.log( colorSelectorItems[c].classList[cl] );
+              if( colorSelectorItems[c].classList[cl] == 'item_unchecked' ) {
+                colorSelectorFrames[x].classList.add('item_unchecked');
+                anythingOos = true; }
+              if( colorSelectorItems[c].classList[cl] == 'item_instock' ) {
+                colorSelectorFrames[x].classList.add('item_instock'); }
+              if( colorSelectorItems[c].classList[cl] == 'item_oos' ) {
+                colorSelectorFrames[x].classList.add('item_oos');
+                anythingOos = true; }
+            }
+            
+            break;
+          }
         }
-        if( stitches > stitchesPerUnit ) {
-          stitchCountDiv.classList.remove('item_oos');
-        }
+        // document.getElementById('colorSelectorFrames')[x].style.backgroundColor;
+
+        // if(stitches < stitchesPerUnit) {
+        //   anythingOos = true;
+        //   stitchCountDiv.classList.add('item_oos');
+        // }
+        // if( stitches > stitchesPerUnit ) {
+        //   stitchCountDiv.classList.remove('item_oos');
+        // }
       }
 
       if( anythingOos ) { document.getElementById('colorSelectorFrame_oos').style.display = 'block'; }
@@ -671,15 +758,17 @@
       return id;
     }
     function LoomSize(size) {
-        loomSize = size;
-        
-        let assign = false;
-        // if( document.getElementById('RedrawLoomOnColorChange').checked ) { assign = true; }
-        RedrawLoom(assign);
+      loomSize = size;
+      
+      let assign = false;
+      // if( document.getElementById('RedrawLoomOnColorChange').checked ) { assign = true; }
+      RedrawLoom(assign);
 
-        document.getElementById('loomSize-18').style.backgroundColor = '#aaaaaa';
-        document.getElementById('loomSize-27').style.backgroundColor = '#aaaaaa';
-        document.getElementById('loomSize-' + size).style.backgroundColor = '#ed7b5a';
+      document.getElementById('loomSize-18').style.backgroundColor = '#aaaaaa';
+      document.getElementById('loomSize-27').style.backgroundColor = '#aaaaaa';
+      document.getElementById('loomSize-' + size).style.backgroundColor = '#ed7b5a';
+
+      CheckShopifyInventory();
     }
     function PickColor(id) {
         var old_element = document.getElementById("colorSelectorRow");
@@ -954,6 +1043,5 @@
     function onlyUnique(value, index, array) { return array.indexOf(value) === index; }
 
     RedrawLoom(true);
-    CheckShopifyInventory();
     document.getElementById('colorSelector1').click();
 </script>
