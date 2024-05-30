@@ -3,13 +3,17 @@
     @media only screen and (max-width: 600px) {
         #loomWrapper { display: unset; }
     } 
-    #loomControls { float: left; width: 25%; margin: 2rem;}
-    #loom { float: left; width: 65%; margin: 2rem; }
+    #loomControls { float: left; width: 25%; margin: 1rem; }
+    #loomControls p { margin-bottom: 0; }
+    #loomDisplay { float: left; width: 100%; margin: 1rem; }
     @media only screen and (max-width: 600px) {
         #loom { width: 100%; }
     }
-
-    .colorSelectorFrame { position: relative; float: left; padding: 8px; }
+    #colorSelectorFrames { width: fit-content; margin: auto; }  
+    #loom { clear: both; width: 60%; margin: auto; }
+  
+    .colorSelectorFrame { position: relative; float: left; padding: 8px; display: flex; }
+    .colorSelectorFrame p { font-size: x-large; font-weight: 800; padding: inherit; margin: 0 auto; }
   
     /* .colorSelectorFrame.item_instock button, .colorSelectorItem.item_instock { border: solid 5px green; } */
     .colorSelectorFrame.item_oos button, .colorSelectorItem.item_oos { border: solid 5px red; }
@@ -18,14 +22,17 @@
 
     .colorName { font-size: small; text-align: center; } 
     .colorSelector { float: left; border: solid 1px black; width: 70px; height: 70px; margin: 0px 5px 5px 0px; color: white; font-size: xx-large; font-weight: 800; }
+    #colorSelectorRow { display: flow-root; padding-bottom: 1rem; }
     .colorSelectorItem { position: relative; float: left; border: solid 1px black; width: calc((100% / 8) - 5px); height: 20px; margin-right: 5px; }
     .labelHide { display: none; top: 26px; left: -100%; z-index: 10; }
     .colorSelectorItem:hover > .labelHide { display: block; color: black; display: block; position: absolute; left: 0; border: solid 1px black; padding: 5px 10px; border-radius: 5rem; background-color: white; }
     .highlighted { background-color: #c6f3fd !important; }
 
     .clearRow { clear: both; padding-top: 5px; }		
-    .buttonRow { position: relative; padding-top: 15px; clear: both; }
+    .buttonRow { position: relative; clear: both; /* border: solid 2px black; */ padding: 0.5rem 0; margin-bottom: 1rem; }
+    .buttonRow button { right: 0.5rem; margin-bottom: 0.5rem; }
 
+  
     .loomItem { float: left; border: solid 1px black; text-align: center; }
     /* .loomItem, .loomSelectorInset { font-weight: 700; font-size: calc(var(--typeBaseSize) - 2px); line-height: 1.42; font-family: var(--typeBasePrimary),var(--typeBaseFallback); padding: 14px; } */
     .loomItem, .loomSelectorInset { color: #ffffffcc; text-shadow: 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa }
@@ -46,14 +53,8 @@
 
 <div id="loomWrapper">
     <div id="loomControls">
-        <div id="colorSelectorFrames"></div>
-        <div id="colorSelectorFrame_oos">Some items may be out of stock, and will not be added to your cart.</div>
-      
-        <div class="buttonRow">
-          <button id="" class="btn btn--small" onclick="javascript:AddNewColorFrame();" style="background-color: #ed7b5a">Add Color</button>
-        </div>
-      
-        <div id="colorSelectorRow" class="buttonRow">
+        <div id="colorSelectorRow" class="">
+          <p><strong>Color Swatches</strong></p>
           <div class="clearRow">
             <div id="colorSelectorItem1" class="colorSelectorItem" style="background-color: #887255">
                 <div class="labelHide site-nav__link">Autumn</div>
@@ -207,14 +208,18 @@
         </div> -->
 
         <div class="buttonRow">
+            <p><strong>Color Options</strong></p>
+            <button id="" class="btn btn--small" onclick="javascript:AddNewColorFrame();" style="background-color: #ed7b5a">Add Color</button>
             <button class="btn btn--small" onclick="javascript:RandomizeColors();" style="background-color: #aaaaaa">Randomize Colors</button>
         </div>
 
         <div class="buttonRow">
+            <p><strong>Loom Selector</strong></p>
             <button id="loomSize-18" class="btn btn--small" onclick="javascript:LoomSize(18);" style="background-color: #ed7b5a">Traditional Size</button>
             <button id="loomSize-27" class="btn btn--small" onclick="javascript:LoomSize(27);" style="background-color: #aaaaaa">PRO Size</button>
         </div>
-        <div class="buttonRow">
+      
+        <div class="buttonRow" style="display: none;">
             <select name="loomPattern" id="loomPattern" onChange="javascript:RedrawLoom(true)">
                 <option value="loomPattern2">Sep Pattern 2</option>
                 <option value="loomPattern1">Nov Pattern 1</option>
@@ -225,15 +230,18 @@
             </select>
         </div>
 
-        <div class="buttonRow">
-          <button type="button" name="add" data-add-to-cart="" class="btn btn--full add-to-cart" onclick="javascript:AddLoomToCart();">
-            <span data-add-to-cart-text="" data-default-text="Add to cart">Add to cart</span>
-          </button>
-        </div>
+        <div id="colorSelectorFrame_oos">Some items may be out of stock, and will not be added to your cart.</div>
+        <button type="button" name="add" data-add-to-cart="" class="btn btn--full add-to-cart" onclick="javascript:AddLoomToCart();" style="margin-top: 1rem;">
+          <span data-add-to-cart-text="" data-default-text="Add to cart">Add to cart</span>
+        </button>
 
     </div>
 
-    <div id="loom"></div>
+    <div id="loomDisplay">
+          <div id="colorSelectorFrames"></div>
+          <div style="clear: both; height: 1rem;"></div>
+          <div id="loom"></div>
+    </div>
 
 </div>
 
