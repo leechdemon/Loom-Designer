@@ -257,7 +257,7 @@
       colorSelectorFrame.classList.add('color-' + index);
       colorSelectorFrames.appendChild(colorSelectorFrame);
 
-      colorSelectorFrame.innerHTML = '<button id="colorSelector'+index+'" class="colorSelector" onclick="PickColor('+index+');" style="background-color: #ff0000;">0</button><p id="loopCount-'+index+'" style="font-size: small;">Color Name</p>';
+      colorSelectorFrame.innerHTML = '<button id="colorSelector'+index+'" class="colorSelector" onclick="PickColor('+index+');" style="background-color: #ff0000;">0</button><p id="colorName-'+index+'" style="font-size: small;">Color Name</p>';
         
       RandomizeColors(index);
     }
@@ -276,7 +276,9 @@
       var allColorSelectorFrames  = document.getElementsByClassName('colorSelectorFrame ');
       for( c = 0; c < allColorSelectorFrames.length; c++ ) { 
         if( allColorSelectorFrames[c].firstChild.style.backgroundColor ) {
-          productList.push( GetProductIdFromRGB( allColorSelectorFrames[c].firstChild.style.backgroundColor ) );
+          var product = GetProductFromRGB( allColorSelectorFrames[c].firstChild.style.backgroundColor );
+          console.log(product);
+          productList.push( product.id );
         }
       }
       
@@ -385,7 +387,7 @@
 
       for( var x = 0; x < allColorSelectorItems.length; x++ ) {
         /* For each colorSelectorItem swatch, get the productId */
-        var thisProductId = GetProductIdFromRGB( allColorSelectorItems[x].style.backgroundColor );
+        var thisProductId = GetProductFromRGB( allColorSelectorItems[x].style.backgroundColor ).id;
         
         // console.log('product',product);
         /* For each product, if the productId matches the current Div's productId... */
@@ -420,6 +422,7 @@
       var colorSelectorFrames = document.getElementsByClassName('colorSelectorFrame');
       for(var x = 0; x < colorSelectorFrames.length; x++ ) {
         var colorGroup = document.getElementsByClassName('color-' + (x+1) );
+        var colorName = "";
         var loops = 0;
 
         for(var y = 0; y < colorGroup.length; y++) {
@@ -430,9 +433,12 @@
             loops++;
           }
         }
-
         var colorSelectorButton = document.getElementById('colorSelector' + (x+1) );
         colorSelectorButton.innerHTML = loops.toString();
+
+        var product = GetProductFromRGB( colorSelectorFrames[x].firstChild.style.backgroundColor );
+        var colorNameDiv = document.getElementById('colorName-' + (x+1) );
+        colorNameDiv.innerHTML = product.name;
 
         // var loopsPerUnit = 160;
         // if(loops < loopsPerUnit) {
@@ -523,8 +529,8 @@
             loom.appendChild(loomRow);
         }
     }
-    function GetProductIdFromRGB(rgb) {
-      var id = "";
+    function GetProductFromRGB(rgb) {
+      var product = [];
       var hexColor = '';
       
       rgb = rgb.split("(")[1].split(")")[0].split(", ");
@@ -543,222 +549,290 @@
       switch( true ) {
         //7" Loom
         case (loomSize == 18) && (hexColor == "887255"):
-          id = "39980044451915";
+          product.id = "39980044451915";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "213996"):
-          id = "39980044517451";
+          product.id = "39980044517451";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "38383a"):
-          id = "39980044615755";
+          product.id = "39980044615755";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "532025"):
-          id = "39980044681291";
+          product.id = "39980044681291";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "f57b99"):
-          id = "39980044714059";
+          product.id = "39980044714059";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "fbed94"):
-          id = "39980044746827";
+          product.id = "39980044746827";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "3c1d14"):
-          id = "39980044845131";
+          product.id = "39980044845131";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "1c233e"):
-          id = "39980044943435";
+          product.id = "39980044943435";
+          product.name = "Super Green";
           break;
 
         case (loomSize == 18) && (hexColor == "d7c8a9"):
-          id = "39980045008971";
+          product.id = "39980045008971";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "0e6f2e"):
-          id = "39980045041739";
+          product.id = "39980045041739";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "b194c3"):
-          id = "39980045140043";
+          product.id = "39980045140043";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "b0d947"):
-          id = "39980045205579";
+          product.id = "39980045205579";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "859855"):
-          id = "39980045271115";
+          product.id = "39980045271115";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "9a86b8"):
-          id = "39980045303883";
+          product.id = "39980045303883";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "d74d21"):
-          id = "39980045631563";
+          product.id = "39980045631563";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "775d2d"):
-          id = "39980045434955";
+          product.id = "39980045434955";
+          product.name = "Super Green";
           break;
 
         case (loomSize == 18) && (hexColor == "4d1e96"):
-          id = "39980045926475";
+          product.id = "39980045926475";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "92b6cb"):
-          id = "39980045992011";
+          product.id = "39980045992011";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "04897f"):
-          id = "39980046024779";
+          product.id = "39980046024779";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "8c2f9a"):
-          id = "39980046221387";
+          product.id = "39980046221387";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "04322c"):
-          id = "39980046319691";
+          product.id = "39980046319691";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "f840ab"):
-          id = "39980046090315";
+          product.id = "39980046090315";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "53545a"):
-          id = "39980046352459";
+          product.id = "39980046352459";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "971524"):
-          id = "39980046385227";
+          product.id = "39980046385227";
+          product.name = "Super Green";
           break;
 
         case (loomSize == 18) && (hexColor == "5ba9c4"):
-          id = "39980046417995";
+          product.id = "39980046417995";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "e95f5f"):
-          id = "39980046483531";
+          product.id = "39980046483531";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "984e38"):
-          id = "39980046516299";
+          product.id = "39980046516299";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "a5a5a8"):
-          id = "39980046549067";
+          product.id = "39980046549067";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "06a0cd"):
-          id = "39980046581835";
+          product.id = "39980046581835";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "e1723b"):
-          id = "39980046647371";
+          product.id = "39980046647371";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "e5e7ea"):
-          id = "39980046712907";
+          product.id = "39980046712907";
+          product.name = "Super Green";
           break;
         case (loomSize == 18) && (hexColor == "445041"):
-          id = "39980046745675";
+          product.id = "39980046745675";
+          product.name = "Super Green";
           break;
 
         case (loomSize == 18) && (hexColor == "fdf5e9"):
-          id = "39980046811211";
+          product.name = "Super Green";
+          product.id = "39980046811211";
           break;
         case (loomSize == 18) && (hexColor == "f3b814"):
-          id = "39980046843979";
+          product.name = "Super Green";
+          product.id = "39980046843979";
           break;
 
         // 10" Loom
         case (loomSize == 27) && (hexColor == "887255"):
-          id = "32648134099019";
+          product.id = "32648134099019";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "213996"):
-          id = "32648133738571";
+          product.id = "32648133738571";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "38383a"):
-          id = "32648134754379";
+          product.id = "32648134754379";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "532025"):
-          id = "32648134164555";
+          product.id = "32648134164555";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "f57b99"):
-          id = "32648134688843";
+          product.id = "32648134688843";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "fbed94"):
-          id = "32648134590539";
+          product.id = "32648134590539";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "3c1d14"):
-          id = "32648134295627";
+          product.id = "32648134295627";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "1c233e"):
-          id = "32648134230091";
+          product.id = "32648134230091";
+          product.name = "Super Green";
           break;
 
         case (loomSize == 27) && (hexColor == "d7c8a9"):
-          id = "32648134361163";
+          product.id = "32648134361163";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "0e6f2e"):
-          id = "32648133836875";
+          product.id = "32648133836875";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "b194c3"):
-          id = "32648134459467";
+          product.id = "32648134459467";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "b0d947"):
-          id = "32648133869643";
+          product.id = "32648133869643";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "859855"):
-          id = "32648134492235";
+          product.id = "32648134492235";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "9a86b8"):
-          id = "32648134525003";
+          product.id = "32648134525003";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "d74d21"):
-          id = "32648133935179";
+          product.id = "32648133935179";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "775d2d"):
-          id = "32648134328395";
+          product.id = "32648134328395";
+          product.name = "Super Green";
           break;
 
         case (loomSize == 27) && (hexColor == "4d1e96"):
-          id = "32648133673035";
+          product.id = "32648133673035";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "92b6cb"):
-          id = "32648134721611";
+          product.id = "32648134721611";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "04897f"):
-          id = "32648133804107";
+          product.id = "32648133804107";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "8c2f9a"):
-          id = "32648133705803";
+          product.id = "32648133705803";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "04322c"):
-          id = "32648134426699";
+          product.id = "32648134426699";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "f840ab"):
-          id = "32648134000715";
+          product.id = "32648134000715";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "53545a"):
-          id = "32648134262859";
+          product.id = "32648134262859";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "971524"):
-          id = "32648133967947";
+          product.id = "32648133967947";
+          product.name = "Super Green";
           break;
 
         case (loomSize == 27) && (hexColor == "5ba9c4"):
-          id = "32648134557771";
+          product.id = "32648134557771";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "e95f5f"):
-          id = "32648134033483";
+          product.id = "32648134033483";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "984e38"):
-          id = "32648134393931";
+          product.id = "32648134393931";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "a5a5a8"):
-          id = "32648134066251";
+          product.id = "32648134066251";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "06a0cd"):
-          id = "32648133771339";
+          product.id = "32648133771339";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "e1723b"):
-          id = "32648134623307";
+          product.id = "32648134623307";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "e5e7ea"):
-          id = "32648134656075";
+          product.id = "32648134656075";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "445041"):
-          id = "32648134131787";
+          product.id = "32648134131787";
+          product.name = "Super Green";
           break;
           
         case (loomSize == 27) && (hexColor == "fdf5e9"):
-          id = "32648134197323";
+          product.id = "32648134197323";
+          product.name = "Super Green";
           break;
         case (loomSize == 27) && (hexColor == "f3b814"):
-          id = "32648133902411";
+          product.id = "32648133902411";
+          product.name = "Super Green";
           break;
       }
       
-      return id;
+      return product;
     }
     function LoomSize(size) {
       loomSize = size;
@@ -797,18 +871,28 @@
     function RandomizeColors(index) {
         var colorSelectorItems = document.getElementsByClassName('colorSelectorItem');
         var colorSelectorFrames = document.getElementsByClassName('colorSelectorFrame');
+        var product = [];
+        var colorNameDiv = '';
         
         if(index) {
-            var randomIndex = Math.floor( Math.random() * colorSelectorItems.length );
-            document.getElementById('colorSelector'+index).style.backgroundColor = colorSelectorItems[randomIndex].style.backgroundColor;
+          var randomIndex = Math.floor( Math.random() * colorSelectorItems.length );
+          document.getElementById('colorSelector'+index).style.backgroundColor = colorSelectorItems[randomIndex].style.backgroundColor;
+
+          colorNameDiv = document.getElementById('colorName-' + index );
+          product = GetProductFromRGB( colorSelectorItems[index].style.backgroundColor );
         }
         else {
-            for(var i = 1; i <= colorSelectorFrames.length; i++) {
-                var randomIndex = Math.floor( Math.random() * colorSelectorItems.length );
-                document.getElementById('colorSelector'+i).style.backgroundColor = colorSelectorItems[randomIndex].style.backgroundColor;
-            }
+          for(var i = 1; i <= colorSelectorFrames.length; i++) {
+            var randomIndex = Math.floor( Math.random() * colorSelectorItems.length );
+            document.getElementById('colorSelector'+i).style.backgroundColor = colorSelectorItems[randomIndex].style.backgroundColor;
+
+            colorNameDiv = document.getElementById('colorName-' + i );
+            product = GetProductFromRGB( colorSelectorItems[i].style.backgroundColor );
+          }
         }
-        
+        colorNameDiv.innerHTML = product.name;
+
+      
         // if( document.getElementById('RedrawLoomOnColorChange').checked ) { RedrawLoom( true ); }
         // else {
             
