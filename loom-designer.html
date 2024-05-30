@@ -38,6 +38,10 @@
     .loomSelectorInset { width: 75%;  margin: auto; background-color: red; border-radius: 5em; border: solid 1px black; text-align: center; }
 
 </style>
+<script>
+  var version = "0.2.3";
+  console.log("Loom Designer v" + version);
+</script>
 
 <div id="loomWrapper">
     <div id="loomControls">
@@ -253,7 +257,7 @@
       colorSelectorFrame.classList.add('color-' + index);
       colorSelectorFrames.appendChild(colorSelectorFrame);
 
-      colorSelectorFrame.innerHTML = '<button id="colorSelector'+index+'" class="colorSelector" onclick="PickColor('+index+');" style="background-color: #ff0000;"></button><p id="stitchCount-'+index+'" style="font-size: small;"><span>0</span> Stitches</p>';
+      colorSelectorFrame.innerHTML = '<button id="colorSelector'+index+'" class="colorSelector" onclick="PickColor('+index+');" style="background-color: #ff0000;"></button><p id="loopCount-'+index+'" style="font-size: small;"><span>0</span> Loops</p>';
         
       RandomizeColors(index);
     }
@@ -410,25 +414,28 @@
         }
       }
     }
-    function CountStitches() {
+    function CountLoops() {
       var anythingOos = false;
       /* For each colorSelectorFrame in use... */
       var colorSelectorFrames = document.getElementsByClassName('colorSelectorFrame');
       for(var x = 0; x < colorSelectorFrames.length; x++ ) {
         var colorGroup = document.getElementsByClassName('color-' + (x+1) );
-        var stitches = 0;
+        var loops = 0;
 
         for(var y = 0; y < colorGroup.length; y++) {
-          if( colorGroup[y].classList.contains("loomItem") ) {
-            stitches++;
+          if( colorGroup[y].parentNode.classList.contains("loomRowSelector") ) {
+            loops++;
+          }
+          if( colorGroup[y].parentNode.parentNode.classList.contains("loomColSelector") ) {
+            loops++;
           }
         }
 
-        var stitchCountDiv = document.getElementById('stitchCount-' + (x+1) );
-        stitchCountDiv.innerHTML = stitches + " stitches";
+        var loopCountDiv = document.getElementById('loopCount-' + (x+1) );
+        loopCountDiv.innerHTML = loops + " Loops";
 
-        // var stitchesPerUnit = 160;
-        // if(stitches < stitchesPerUnit) {
+        // var loopsPerUnit = 160;
+        // if(loops < loopsPerUnit) {
 
         colorSelectorFrames[x].classList.remove('item_instock', 'item_oos', 'item_unchecked');
         
@@ -454,12 +461,12 @@
         }
         // document.getElementById('colorSelectorFrames')[x].style.backgroundColor;
 
-        // if(stitches < stitchesPerUnit) {
+        // if(loops < loopsPerUnit) {
         //   anythingOos = true;
-        //   stitchCountDiv.classList.add('item_oos');
+        //   loopCountDiv.classList.add('item_oos');
         // }
-        // if( stitches > stitchesPerUnit ) {
-        //   stitchCountDiv.classList.remove('item_oos');
+        // if( loops > loopsPerUnit ) {
+        //   loopCountDiv.classList.remove('item_oos');
         // }
       }
 
@@ -812,7 +819,7 @@
         div.classList.remove('color-' + x);
       }
       div.classList.add('color-'+index);
-      CountStitches();
+      CountLoops();
     }
     function RecolorLoom() {
       var highlighted = document.getElementsByClassName('highlighted')[0];
@@ -835,13 +842,13 @@
         }
       }
 
-      CountStitches();
+      CountLoops();
     }
     function RedrawLoom(assign) { // Use this for changes/refreshes
         SelectPattern();
         CreateLoom();
         AssignLoomColors(assign);
-        CountStitches();
+        CountLoops();
         SelectorHandlers();
     }
     function SelectorHandlers() {
