@@ -16,7 +16,7 @@
     .colorSelectorFrame.item_unchecked button, .colorSelectorItem.item_unchecked { border: solid 5px blue; }
     #colorSelectorFrame_oos { float: left; background-color: #ff000033; padding: 8px; margin-top: 8px; border: solid 2px red; }
 
-    .colorSelector { float: left; border: solid 1px black; width: 70px; height: 70px; margin: 0px 5px 5px 0px; }
+    .colorSelector { float: left; border: solid 1px black; width: 70px; height: 70px; margin: 0px 5px 5px 0px; color: white; font-size: xx-large; font-weight: 800; }
     .colorSelectorItem { position: relative; float: left; border: solid 1px black; width: calc((100% / 8) - 5px); height: 20px; margin-right: 5px; }
     .labelHide { display: none; top: 26px; left: -100%; z-index: 10; }
     .colorSelectorItem:hover > .labelHide { display: block; color: black; display: block; position: absolute; left: 0; border: solid 1px black; padding: 5px 10px; border-radius: 5rem; background-color: white; }
@@ -257,7 +257,7 @@
       colorSelectorFrame.classList.add('color-' + index);
       colorSelectorFrames.appendChild(colorSelectorFrame);
 
-      colorSelectorFrame.innerHTML = '<button id="colorSelector'+index+'" class="colorSelector" onclick="PickColor('+index+');" style="background-color: #ff0000;"></button><p id="loopCount-'+index+'" style="font-size: small;"><span>0</span> Loops</p>';
+      colorSelectorFrame.innerHTML = '<button id="colorSelector'+index+'" class="colorSelector" onclick="PickColor('+index+');" style="background-color: #ff0000;">0</button><p id="loopCount-'+index+'" style="font-size: small;">Color Name</p>';
         
       RandomizeColors(index);
     }
@@ -431,8 +431,8 @@
           }
         }
 
-        var loopCountDiv = document.getElementById('loopCount-' + (x+1) );
-        loopCountDiv.innerHTML = loops + " Loops";
+        var colorSelectorButton = document.getElementById('colorSelector' + (x+1) );
+        colorSelectorButton.innerHTML = loops.toString();
 
         // var loopsPerUnit = 160;
         // if(loops < loopsPerUnit) {
@@ -815,8 +815,10 @@
         // }
     }
     function ReassignColorClass(div, index) {
-      for(var x = 1; x <= div.classList.length; x++) {
+      console.log( document.getElementById('colorSelectorFrames').children.length );
+      for(var x = 1; x <= document.getElementById('colorSelectorFrames').children.length; x++) {
         div.classList.remove('color-' + x);
+        console.log('div', div, 'removed color-'+x);
       }
       div.classList.add('color-'+index);
       CountLoops();
