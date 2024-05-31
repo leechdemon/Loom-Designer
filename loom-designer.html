@@ -11,8 +11,9 @@
     }
     #colorSelectorFrames { width: fit-content; margin: auto; }  
     #loom { clear: both; width: 60%; margin: auto; }
-  
-    .colorSelectorFrame { position: relative; float: left; padding-right: 0.25rem; display: flex; }
+    .closebox { background-color: white; border: solid; width: 1.25rem; height: 1.25rem; line-height: normal; text-align: center; padding: 0px; transition-duration: 0.25s; opacity: 0; }
+    .colorSelectorFrame:hover .closebox { opacity: 1; }
+    .colorSelectorFrame { position: relative; float: left; padding: 0.5rem; display: flex; }
     .colorSelectorFrame p { font-size: large; font-weight: 800; padding: inherit; margin: 0 auto; }
   
     /* .colorSelectorFrame.item_instock button, .colorSelectorItem.item_instock { border: solid 5px green; } */
@@ -20,7 +21,7 @@
     .colorSelectorFrame.item_unchecked button, .colorSelectorItem.item_unchecked { border: solid 5px blue; }
     #colorSelectorFrame_oos { float: left; background-color: #ff000033; padding: 8px; margin-top: 8px; border: solid 2px red; }
 
-    .colorName { font-size: small; max-width: 100px; } 
+    .colorName { font-size: small; /* max-width: 100px; */ } 
     .colorSelector { float: left; border: solid 1px black; width: 3rem; height: 3rem; color: white; font-size: xx-large; font-weight: 800; text-shadow: 0 0 2px black; margin-right: 0.25rem; }
     #colorSelectorRow { display: flow-root; padding-bottom: 0.5rem; }
     .colorSelectorItem { position: relative; float: left; border: solid 1px black; width: calc((100% / 8) - 5px); height: 20px; margin-right: 5px; }
@@ -35,7 +36,7 @@
   
     .loomItem { float: left; border: solid 1px black; text-align: center; }
     /* .loomItem, .loomSelectorInset { font-weight: 700; font-size: calc(var(--typeBaseSize) - 2px); line-height: 1.42; font-family: var(--typeBasePrimary),var(--typeBaseFallback); padding: 14px; } */
-    .loomItem, .loomSelectorInset { color: #ffffffcc; text-shadow: 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa }
+    .loomItem, .loomSelectorInset { background-color: red; color: #ffffffcc; text-shadow: 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa }
     .loomSelectorInset { height: inherit; width: inherit; }
     #loomItem-0-0 { opacity: 0; }
     .loomRow-0 { margin-bottom: 0.5rem; }
@@ -48,11 +49,11 @@
     .loomItemWidth-27 { width: 18px; height: 18px; font-size: small; }
 
     .loomRowSelector, .loomColSelector > .loomItem { float: left; border: unset; }
-    .loomSelectorInset {  margin: auto; background-color: red; border: solid 1px black; text-align: center; }
+    .loomSelectorInset {  margin: auto; border: solid 1px black; text-align: center; }
 
 </style>
 <script>
-  var version = "0.2.3";
+  var version = "0.2.4";
   console.log("Loom Designer v" + version);
 </script>
 
@@ -261,7 +262,7 @@
     // var productTitle10 = 'pro-potholder-refill-loops';
     var productTitle10 = 'pro-potholder-mini-bags';
     
-    // var productId = 'pro-potholder-refill-loops';
+    // var productId = 'pro-potholder-refill-loops'; 
     // var productList = [];
     // productList.push( productId );
   
@@ -272,27 +273,28 @@
       colorSelectorFrame.classList.add('color-' + index);
       colorSelectorFrames.appendChild(colorSelectorFrame);
 
-      colorSelectorFrame.innerHTML = '<button id="colorSelector'+index+'" class="colorSelector" onclick="PickColor('+index+');" style="background-color: #ff0000;">0</button><p id="colorName-'+index+'" class="colorName">Color Name</p>';
-        
+      colorSelectorFrame.innerHTML = '<button id="colorSelector'+index+'" class="colorSelector" onclick="PickColor('+index+');" style="background-color: #ff0000;">0</button><p id="colorName-'+index+'" class="colorName">Color Name</p><button id="closebox-'+index+'" onclick="javascript:CloseFrame('+index+');" class="closebox">X</button>';
+      
       RandomizeColors(index);
     }
     function AddNewColorFrame() {
       var colorSelectorFrames = document.getElementById('colorSelectorFrames');
-      var totalColors = colorSelectorFrames.childElementCount;
-      if(totalColors < 6) {
-        AddColorFrame(colorSelectorFrames.childElementCount + 1);
-        document.getElementById('colorSelector' + (totalColors+1) ).click();
-      }
+      for(var index = 1; index <= 50; index++ ) {
+        if( !document.getElementById('colorSelectorFrame' + index) ) {
+          AddColorFrame(index);
+          document.getElementById('colorSelector' + index ).click();
+          break;
+        }
+      }  
     }
     function AddLoomToCart() {
       var productList = [];      
 
       /* Select all colors from the ColorSelectorFrames */
-      var allColorSelectorFrames  = document.getElementsByClassName('colorSelectorFrame ');
+      var allColorSelectorFrames  = document.getElementsByClassName('colorSelectorFrame');
       for( c = 0; c < allColorSelectorFrames.length; c++ ) { 
         if( allColorSelectorFrames[c].firstChild.style.backgroundColor ) {
           var product = GetProductFromRGB( allColorSelectorFrames[c].firstChild.style.backgroundColor );
-          console.log(product);
           productList.push( product.id );
         }
       }
@@ -445,6 +447,11 @@
       // var old_element = document.getElementById("loom");
       // var new_element = old_element.cloneNode(true);
       // old_element.parentNode.replaceChild(new_element, old_element);
+    }
+    function CloseFrame( id ) {
+      document.getElementById('colorSelectorFrame' + id).remove();
+
+      ResortColorClassIds( id );
     }
     function CountLoops() {
       var anythingOos = false;
@@ -927,10 +934,8 @@
         RecolorLoom();
     }
     function ReassignColorClass(div, index) {
-      console.log( document.getElementById('colorSelectorFrames').children.length );
       for(var x = 1; x <= document.getElementById('colorSelectorFrames').children.length; x++) {
         div.classList.remove('color-' + x);
-        console.log('div', div, 'removed color-'+x);
       }
       div.classList.add('color-'+index);
       CountLoops();
@@ -940,10 +945,10 @@
         var colorItems = document.getElementsByClassName('color-' + id);
         for ( var i = 0; i < colorItems.length; i++ ) {
           if( colorItems[i].classList.contains('colorSelectorFrame') ) {
-            colorItems[i].children[0].style.backgroundColor = document.getElementsByClassName('colorSelectorFrame')[id-1].firstChild.style.backgroundColor;
+            colorItems[i].children[0].style.backgroundColor = document.getElementById('colorSelectorFrame' + id ).firstChild.style.backgroundColor;
           }
           else {
-            colorItems[i].style.backgroundColor = document.getElementById('colorSelectorFrames').children[id-1].firstChild.style.backgroundColor;
+            colorItems[i].style.backgroundColor = document.getElementById('colorSelectorFrame'+ id ).firstChild.style.backgroundColor;
           }
         }
       }
@@ -956,6 +961,67 @@
         AssignLoomColors(assign);
         CountLoops();
         SelectorHandlers();
+    }
+    function ResortColorClassIds( id ) {
+      var newColorIdArray = [];
+      var maxColors = 25;
+      
+      /* For Each Color... */
+      for(var x = 1; x <= maxColors; x++ ) {
+        var colorDivs = document.getElementsByClassName('color-'+x);
+        
+        /* If there's a color-X match */
+        if( colorDivs.length > 0 ) {
+          
+          /* Set newColorId */
+          var newColorId = 0;
+          if( x != id ) {
+            newColorIdArray[x] = x;
+            newColorId = newColorIdArray.filter(function( element ) {
+               return element !== undefined;
+            }).length;
+          }
+          
+          /* Reassign color-x */
+          for(var d = colorDivs.length - 1; d >= 0 ; d-- ) {
+            var thisDiv = colorDivs[d];
+            thisDiv.classList.replace( 'color-'+x, 'color-' + newColorId );
+
+            /* Reassign colorSelectorFrameX */
+            if( thisDiv.id == 'colorSelectorFrame'+x ) {
+
+              /* If this is the old color, remove the frame */
+              if( x == 0 ) { thisDiv.remove(); }
+              else {
+                thisDiv.setAttribute("id", 'colorSelectorFrame'+newColorId);
+                var childDivs = thisDiv.children;
+                
+                for( var y = 0; y < childDivs.length; y++ ) {
+                  if( childDivs[y].id == 'colorSelector'+x ) {
+                    childDivs[y].setAttribute("id", 'colorSelector'+newColorId);
+                    childDivs[y].setAttribute("onclick", 'javascript:PickColor('+newColorId+');');
+                  }
+                  if( childDivs[y].id == 'colorName-'+x ) { childDivs[y].setAttribute("id", 'colorName-'+newColorId); }
+                  if( childDivs[y].id == 'closebox-'+x ) {
+                    childDivs[y].setAttribute("id", 'closebox-'+newColorId);
+                    childDivs[y].setAttribute("onclick", 'javascript:CloseFrame('+newColorId+');');
+                  }
+                }
+              }
+            } /* End Reassign colorSelectorFrameX */
+          
+          } /* End Reassign color-x */
+        } /* End If there's a color-X match */
+        
+      } /* End For Each Color... */
+
+      /* Remove color-0 */
+      var colorDivs = document.getElementsByClassName('color-0');
+      for( var c = colorDivs.length - 1; c >= 0 ; c-- ) {
+        var thisDiv = colorDivs[c];
+        thisDiv.style.backgroundColor = null;
+        thisDiv.classList.remove('color-0');
+      }
     }
     function SelectorHandlers() {
         var allLoomColSelectors = document.getElementById('loomRow-0').children;
