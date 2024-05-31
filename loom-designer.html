@@ -1,14 +1,18 @@
 <style>
-    #loomWrapper { width: 75%; margin: auto; display: flex; }
-    @media only screen and (max-width: 600px) {
-        #loomWrapper { display: unset; }
-    } 
-    #loomControls { float: left; width: 25%; margin: 1rem; }
-    #loomControls p { margin-bottom: 0; }
-    #loomDisplay { float: left; width: 100%; margin: 1rem; }
-    @media only screen and (max-width: 600px) {
-        #loom { width: 100%; }
-    }
+  #loomWrapper { width: 75%; margin: auto; display: flex; }
+  @media only screen and (max-width: 1500px) { #loomWrapper { display: unset; } } 
+  #loomControls { float: left; width: 25%; margin: 1rem; }
+  #loomControls p { margin-bottom: 0; }
+  #loomDisplay { float: left; width: 100%; margin: 1rem; }
+
+   @media only screen and (max-width: 1500px) {
+    #loom { width: 100% !important; }
+    #loomControls { width: 90% !important; }
+    .loomItemWidth-18 { width: 20px !important; height: 20px !important; font-size: large !important; }
+    .loomItemWidth-27 { width: 12px !important; height: 12px !important; font-size: small !important; }
+  }
+  
+  
     #colorSelectorFrames { width: fit-content; margin: auto; }  
     #loom { clear: both; width: 60%; margin: auto; }
     .closebox { background-color: white; border: solid; width: 1.25rem; height: 1.25rem; line-height: normal; text-align: center; padding: 0px; transition-duration: 0.25s; opacity: 0; }
@@ -53,7 +57,7 @@
 
 </style>
 <script>
-  var version = "0.2.4";
+  var version = "0.2.4b";
   console.log("Loom Designer v" + version);
 </script>
 
@@ -1186,7 +1190,7 @@
         //   break;
 
         // case ("loomPattern12"):
-        //   assignmentPattern = { loomColPegs:"", loomRowPegs:"", pattern: ["", ""] }; 
+        //   assignmentPattern = { loomColPegs:"", loomRowPegs:"", pattern: ["", ""] };
         //   break;
       }
 
