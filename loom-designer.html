@@ -12,17 +12,17 @@
     #colorSelectorFrames { width: fit-content; margin: auto; }  
     #loom { clear: both; width: 60%; margin: auto; }
   
-    .colorSelectorFrame { position: relative; float: left; padding: 8px; display: flex; }
-    .colorSelectorFrame p { font-size: x-large; font-weight: 800; padding: inherit; margin: 0 auto; }
+    .colorSelectorFrame { position: relative; float: left; padding-right: 0.25rem; display: flex; }
+    .colorSelectorFrame p { font-size: large; font-weight: 800; padding: inherit; margin: 0 auto; }
   
     /* .colorSelectorFrame.item_instock button, .colorSelectorItem.item_instock { border: solid 5px green; } */
     .colorSelectorFrame.item_oos button, .colorSelectorItem.item_oos { border: solid 5px red; }
     .colorSelectorFrame.item_unchecked button, .colorSelectorItem.item_unchecked { border: solid 5px blue; }
     #colorSelectorFrame_oos { float: left; background-color: #ff000033; padding: 8px; margin-top: 8px; border: solid 2px red; }
 
-    .colorName { font-size: small; text-align: center; } 
-    .colorSelector { float: left; border: solid 1px black; width: 70px; height: 70px; margin: 0px 5px 5px 0px; color: white; font-size: xx-large; font-weight: 800; }
-    #colorSelectorRow { display: flow-root; padding-bottom: 1rem; }
+    .colorName { font-size: small; max-width: 100px; } 
+    .colorSelector { float: left; border: solid 1px black; width: 3rem; height: 3rem; color: white; font-size: xx-large; font-weight: 800; text-shadow: 0 0 2px black; margin-right: 0.25rem; }
+    #colorSelectorRow { display: flow-root; padding-bottom: 0.5rem; }
     .colorSelectorItem { position: relative; float: left; border: solid 1px black; width: calc((100% / 8) - 5px); height: 20px; margin-right: 5px; }
     .labelHide { display: none; top: 26px; left: -100%; z-index: 10; }
     .colorSelectorItem:hover > .labelHide { display: block; color: black; display: block; position: absolute; left: 0; border: solid 1px black; padding: 5px 10px; border-radius: 5rem; background-color: white; }
@@ -36,14 +36,19 @@
     .loomItem { float: left; border: solid 1px black; text-align: center; }
     /* .loomItem, .loomSelectorInset { font-weight: 700; font-size: calc(var(--typeBaseSize) - 2px); line-height: 1.42; font-family: var(--typeBasePrimary),var(--typeBaseFallback); padding: 14px; } */
     .loomItem, .loomSelectorInset { color: #ffffffcc; text-shadow: 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa }
+    .loomSelectorInset { height: inherit; width: inherit; }
     #loomItem-0-0 { opacity: 0; }
+    .loomRow-0 { margin-bottom: 0.5rem; }
+    .loomRowSelector { margin-right: 0.5rem; }
     .loomRow { clear: both; }
 
-    .loomItemWidth-18 { width: calc(100% / (18 + 1)); padding-bottom: calc(100% / (18 + 1)); height: 0; font-size: x-large; }
-    .loomItemWidth-27 { width: calc(100% / (27 + 1)); padding-bottom: calc(100% / (27 + 1)); height: 0; font-size: large; }
+    /* .loomItemWidth-18 { width: calc(98% / (18 + 1)); padding-bottom: calc(98% / (18 + 1)); height: 0; font-size: large; } */
+    /* .loomItemWidth-27 { width: calc(98% / (27 + 1)); padding-bottom: calc(98% / (27 + 1)); height: 0; font-size: small; } */
+    .loomItemWidth-18 { width: 26px; height: 26px; font-size: large; }
+    .loomItemWidth-27 { width: 18px; height: 18px; font-size: small; }
 
     .loomRowSelector, .loomColSelector > .loomItem { float: left; border: unset; }
-    .loomSelectorInset { width: 75%;  margin: auto; background-color: red; border-radius: 5em; border: solid 1px black; text-align: center; }
+    .loomSelectorInset {  margin: auto; background-color: red; border: solid 1px black; text-align: center; }
 
 </style>
 <script>
@@ -182,7 +187,7 @@
                 <div class="labelHide site-nav__link">Tiger Lily</div>
             </div>
 
-            <div id="colorSelectorItem31" class="colorSelectorItem" style="background-color: #e5e7ea">
+            <div id="colorSelectorItem31" class="colorSelectorItem" style="background-color: #fefefe">
                 <div class="labelHide site-nav__link">White</div>
             </div>
 
@@ -211,6 +216,7 @@
             <p><strong>Color Options</strong></p>
             <button id="" class="btn btn--small" onclick="javascript:AddNewColorFrame();" style="background-color: #ed7b5a">Add Color</button>
             <button class="btn btn--small" onclick="javascript:RandomizeColors();" style="background-color: #aaaaaa">Randomize Colors</button>
+            <button class="btn btn--small" onclick="javascript:ClearSelection();" style="background-color: #aaaaaa">Clear Selection</button>          
         </div>
 
         <div class="buttonRow">
@@ -424,6 +430,21 @@
           }
         }
       }
+    }
+    function ClearSelection() {
+      var highlightedDivs = document.getElementsByClassName('highlighted');
+      for(var x = 0; x < highlightedDivs.length; x++) {
+        highlightedDivs[x].classList.remove('highlighted');
+      }
+
+      /* Remove event listeners */
+      var old_element = document.getElementById("colorSelectorRow");
+      var new_element = old_element.cloneNode(true);
+      old_element.parentNode.replaceChild(new_element, old_element);
+
+      // var old_element = document.getElementById("loom");
+      // var new_element = old_element.cloneNode(true);
+      // old_element.parentNode.replaceChild(new_element, old_element);
     }
     function CountLoops() {
       var anythingOos = false;
@@ -680,7 +701,7 @@
           product.id = "39980046647371";
           product.name = "Tiger Lily";
           break;
-        case (loomSize == 18) && (hexColor == "e5e7ea"):
+        case (loomSize == 18) && (hexColor == "fefefe"):
           product.id = "39980046712907";
           product.name = "White";
           break;
@@ -822,7 +843,7 @@
           product.id = "32648134623307";
           product.name = "Tiger Lily";
           break;
-        case (loomSize == 27) && (hexColor == "e5e7ea"):
+        case (loomSize == 27) && (hexColor == "fefefe"):
           product.id = "32648134656075";
           product.name = "White";
           break;
@@ -870,8 +891,9 @@
 
         document.getElementById('colorSelectorRow').addEventListener('click', function SelectColor(e) {
             var target = e.target;
-            if (target.className.indexOf('colorSelectorItem') > -1) {
-                document.getElementById('colorSelector'+id).style.backgroundColor = target.style.backgroundColor;
+            var colorSelector = document.getElementById('colorSelector'+id);
+            if (target.className.indexOf('colorSelectorItem') > -1 ) {
+                colorSelector.style.backgroundColor = target.style.backgroundColor;
             }
 
             RecolorLoom();
@@ -901,11 +923,8 @@
         }
         colorNameDiv.innerHTML = product.name;
 
-      
-        // if( document.getElementById('RedrawLoomOnColorChange').checked ) { RedrawLoom( true ); }
-        // else {
-            
-        // }
+        ClearSelection();
+        RecolorLoom();
     }
     function ReassignColorClass(div, index) {
       console.log( document.getElementById('colorSelectorFrames').children.length );
@@ -917,23 +936,15 @@
       CountLoops();
     }
     function RecolorLoom() {
-      var highlighted = document.getElementsByClassName('highlighted')[0];
-      var classList = highlighted.classList;
-      var bgColor = highlighted.firstChild.style.backgroundColor;
-      
-      for( var x = 0; x < classList.length; x++ ) {
-        if( classList[x].includes( 'color-' ) ) {
-          var id = classList[x].replace('color-', '');
-        }
-      }
-
-      var colorItems = document.getElementsByClassName('color-' + id);
-      for ( var i = 0; i < colorItems.length; i++ ) {
-        if( colorItems[i].classList.contains('colorSelectorFrame') ) {
-          colorItems[i].children[0].style.backgroundColor = bgColor;
-        }
-        else {
-          colorItems[i].style.backgroundColor = bgColor;
+      for(var id = 1; id <= document.getElementById('colorSelectorFrames').children.length; id++) {
+        var colorItems = document.getElementsByClassName('color-' + id);
+        for ( var i = 0; i < colorItems.length; i++ ) {
+          if( colorItems[i].classList.contains('colorSelectorFrame') ) {
+            colorItems[i].children[0].style.backgroundColor = document.getElementsByClassName('colorSelectorFrame')[id-1].firstChild.style.backgroundColor;
+          }
+          else {
+            colorItems[i].style.backgroundColor = document.getElementById('colorSelectorFrames').children[id-1].firstChild.style.backgroundColor;
+          }
         }
       }
 
@@ -971,6 +982,7 @@
             var invertThread = 0;
         }
 
+      
         targetDiv.addEventListener('mouseover', function highlight(e) {
             // Add highlighting colors to loomItems
             for( r = startPos; r < loomGroup.length; r++ ) {
@@ -986,6 +998,8 @@
         targetDiv.addEventListener('click', function highlight(e) {
             // Begin assigning colors to loomItems
             var highlighted = document.getElementsByClassName('highlighted')[0];
+            
+          if( highlighted ) {
             var highlightedId = highlighted.id.replace('colorSelectorFrame', '');
           
             for( r = startPos; r < loomGroup.length; r++ ) {
@@ -1014,7 +1028,7 @@
             }
             inset.style.backgroundColor = document.getElementById('colorSelector'+highlightedId).style.backgroundColor;
             ReassignColorClass(inset, highlightedId);
-
+          }
         });
         targetDiv.addEventListener('mouseout', function SelectColor(e) {
             // Remove highlighting colors from loomItems
