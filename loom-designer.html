@@ -3,30 +3,30 @@
   @media only screen and (max-width: 1500px) { #loomWrapper { display: unset; } } 
   #loomControls { float: left; width: 25%; margin: 1rem; }
   #loomControls p { margin-bottom: 0; }
-  #loomDisplay { float: left; width: 100%; margin: 1rem; }
+  #loomDisplay { float: left; width: 60%; margin: 1rem; }
 
-   @media only screen and (max-width: 1500px) {
+   /* @media only screen and (max-width: 1500px) {
     #loom { width: 100% !important; }
     #loomControls { width: 90% !important; }
-    .loomItemWidth-18 { width: 20px !important; height: 20px !important; font-size: large !important; }
-    .loomItemWidth-27 { width: 12px !important; height: 12px !important; font-size: small !important; }
-  }
+    .loomItemWidth-18 { width: 20px !important; height: 20px !important; }
+    .loomItemWidth-27 { width: 12px !important; height: 12px !important; }
+  } */
   
   
-    #colorSelectorFrames { display: flow-root; width: 100%; min-height: 5rem; border: solid 1px gray; padding: 0.5rem; }  
-    #loom { clear: both; width: 60%; margin: auto; }
-    .closebox { background-color: white; border: solid; width: 1.25rem; height: 1.25rem; line-height: normal; text-align: center; padding: 0px; transition-duration: 0.25s; opacity: 0; }
+    #colorSelectorFrames { display: flow-root; width: fit-content; margin: auto; min-height: 4.25rem; border: solid 2px #b8616e; padding: 0.5rem; color: #b8616e; }  
+    #loom { clear: both; width: fit-content; margin: auto; }
+    .closebox { background-color: white; border: solid 1px; width: 1.25rem; height: 1.25rem; line-height: normal; text-align: center; padding: 0px; transition-duration: 0.25s; margin-left: 1rem; color: black; opacity: 0; }
     .colorSelectorFrame:hover .closebox { opacity: 1; }
     .colorSelectorFrame { position: relative; float: left; padding: 0.5rem; display: flex; }
-    .colorSelectorFrame p { font-size: large; font-weight: 800; padding: inherit; margin: 0 auto; }
+    .colorSelectorFrame p { font-size: large; font-weight: 800; padding-left: 0.25rem; margin: 0 auto; color: black; }
   
     /* .colorSelectorFrame.item_instock button, .colorSelectorItem.item_instock { border: solid 5px green; } */
-    .colorSelectorFrame.item_oos button, .colorSelectorItem.item_oos { border: solid 5px red; }
+    .colorSelectorFrame.item_oos button, .colorSelectorItem.item_oos { border: solid 3px #00000088; }
     .colorSelectorFrame.item_unchecked button, .colorSelectorItem.item_unchecked { border: solid 5px blue; }
     #colorSelectorFrame_oos { float: left; background-color: #ff000033; padding: 8px; margin-top: 8px; border: solid 2px red; }
 
     .colorName { font-size: small; /* max-width: 100px; */ } 
-    .colorSelector { float: left; border: solid 1px black; width: 3rem; height: 3rem; color: white; font-size: xx-large; font-weight: 800; text-shadow: 0 0 2px black; margin-right: 0.25rem; }
+    .colorSelector { float: left; border: solid 1px black; width: 2rem; height: 2rem; color: white; font-size: large; font-weight: 800; text-shadow: 0 0 2px black; margin-right: 0.25rem; padding: 0rem; }
     #colorSelectorRow { display: flow-root; padding-bottom: 0.5rem; }
     .colorSelectorItem { position: relative; float: left; border: solid 1px black; width: calc((100% / 8) - 5px); height: 20px; margin-right: 5px; }
     .labelHide { display: none; top: 26px; left: -100%; z-index: 10; }
@@ -41,19 +41,19 @@
     .loomItem { float: left; border: solid 1px black; text-align: center; }
     /* .loomItem, .loomSelectorInset { font-weight: 700; font-size: calc(var(--typeBaseSize) - 2px); line-height: 1.42; font-family: var(--typeBasePrimary),var(--typeBaseFallback); padding: 14px; } */
     .loomItem, .loomSelectorInset { background-color: white; color: #ffffffcc; text-shadow: 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa }
-    .loomSelectorInset { height: inherit; width: inherit; }
+    /* .loomSelectorInset { height: inherit; width: inherit; } */
     #loomItem-0-0 { opacity: 0; }
     .loomRow-0 { margin-bottom: 0.5rem; }
     .loomRowSelector { margin-right: 0.5rem; }
     .loomRow { clear: both; }
 
-    /* .loomItemWidth-18 { width: calc(98% / (18 + 1)); padding-bottom: calc(98% / (18 + 1)); height: 0; font-size: large; } */
-    /* .loomItemWidth-27 { width: calc(98% / (27 + 1)); padding-bottom: calc(98% / (27 + 1)); height: 0; font-size: small; } */
-    .loomItemWidth-18 { width: 26px; height: 26px; font-size: large; }
-    .loomItemWidth-27 { width: 18px; height: 18px; font-size: small; }
+    .loomItemWidth-18 { width: 30px; height: 30px; }
+    .loomItemWidth-27 { width: 30px; height: 30px; }
+    .item_direction, .inset_label { font-size: large; }
 
     .loomRowSelector, .loomColSelector > .loomItem { float: left; border: unset; }
-    .loomSelectorInset {  margin: auto; border: solid 1px black; text-align: center; }
+    .loomSelectorInset { border-radius: 20rem; margin: auto; border: solid 1px black; text-align: center; transform: scale(0.8); height: 100%; }
+    /* .inset_label { vertical-align: -webkit-baseline-middle; } */
 
 </style>
 <script>
@@ -243,15 +243,17 @@
             </select>
         </div>
 
-        <div id="colorSelectorFrame_oos">Some items may be out of stock, and will not be added to your cart.</div>
         <button type="button" name="add" data-add-to-cart="" class="btn btn--full add-to-cart" onclick="javascript:AddLoomToCart();" style="margin-top: 1rem;">
           <span data-add-to-cart-text="" data-default-text="Add to cart">Add to cart</span>
         </button>
+        <div id="colorSelectorFrame_oos"></div>
 
     </div>
 
     <div id="loomDisplay">
-          <div id="colorSelectorFrames"></div>
+          <div id="colorSelectorFrames">
+            <h4 style="display: inline-flex; float: left; margin: 0.5rem; font-weight: 800; text-transform: uppercase;">Color Key:</h4>
+          </div>
           <div style="clear: both; height: 1rem;"></div>
           <div id="loom"></div>
     </div>
@@ -265,7 +267,6 @@
 
     /* Build Product Object */
     var productTitle7 = 'traditional-potholder-refill-loop-bags';
-    // var productTitle10 = 'pro-potholder-refill-loops';
     var productTitle10 = 'pro-potholder-mini-bags';
     
     // var productId = 'pro-potholder-refill-loops'; 
@@ -412,7 +413,6 @@
         /* For each colorSelectorItem swatch, get the productId */
         var thisProductId = GetProductFromRGB( allColorSelectorItems[x].style.backgroundColor ).id;
         
-        // console.log('product',product);
         /* For each product, if the productId matches the current Div's productId... */
         for( var v = 0; v < product.variants.length; v++ ) {
           
@@ -438,6 +438,10 @@
           }
         }
       }
+
+      /* Force OOS (for testing) */
+      { allColorSelectorItems[4].classList.add('item_oos'); }
+      { allColorSelectorItems[5].classList.add('item_oos'); }
     }
   function FillLoom() {
     var colorId = document.getElementsByClassName('highlighted')[0].id.replace('colorSelectorFrame','');
@@ -492,7 +496,7 @@
     ResortColorClassIds( id );
   }
   function CountLoops() {
-    var anythingOos = false;
+    var anythingOos = [];
     /* For each colorSelectorFrame in use... */
     var colorSelectorFrames = document.getElementsByClassName('colorSelectorFrame');
     for(var x = 0; x < colorSelectorFrames.length; x++ ) {
@@ -529,12 +533,14 @@
           for(var cl = 0; cl < colorSelectorItems[c].classList.length; cl++ ) {
             if( colorSelectorItems[c].classList[cl] == 'item_unchecked' ) {
               colorSelectorFrames[x].classList.add('item_unchecked');
-              anythingOos = true; }
+              anythingOos.push( GetProductFromRGB( frameColor ).name );
+            }
             if( colorSelectorItems[c].classList[cl] == 'item_instock' ) {
               colorSelectorFrames[x].classList.add('item_instock'); }
             if( colorSelectorItems[c].classList[cl] == 'item_oos' ) {
               colorSelectorFrames[x].classList.add('item_oos');
-              anythingOos = true; }
+              anythingOos.push( GetProductFromRGB( frameColor ).name );
+            }
           }
           
           break;
@@ -551,8 +557,26 @@
       // }
     }
 
-    if( anythingOos ) { document.getElementById('colorSelectorFrame_oos').style.display = 'block'; }
-    else { document.getElementById('colorSelectorFrame_oos').style.display = 'none'; }
+    if( anythingOos.length >= 1 ) {
+      var oosFrame = document.getElementById('colorSelectorFrame_oos');
+      oosFrame.innerHTML = '';
+      oosFrame.style.transitionDuration = 0.0 +'s';
+      oosFrame.style.opacity = 1;
+
+      for( var thisP = 0; thisP < anythingOos.length; thisP++ ) {
+        oosFrame.innerHTML += '"'+ anythingOos[thisP] +'"';
+        if( thisP != anythingOos.length-1 ) oosFrame.innerHTML += ', ';
+      }
+      if( anythingOos.length > 1 ) { oosFrame.innerHTML += ' are '; }
+      else { oosFrame.innerHTML += ' is '; }
+      oosFrame.innerHTML += ' out of stock and will not be added to your cart.';
+      
+      setTimeout( function() {
+        oosFrame.style.transitionDuration = 1.5 +'s';
+        oosFrame.style.opacity = 0;
+      }, 1000 );
+    }
+    else { document.getElementById('colorSelectorFrame_oos').style.opacity = 0; }
   }
   function CreateLoom() {  // Never call this directly, or you miss Event Handlers
       var loom = document.getElementById('loom');
@@ -585,9 +609,9 @@
                   loomItem.id = 'loomItem-' +r+ '-' + c;
                   loomItem.className = 'loomItem loomCol-' +c+' loomRow-' +r+ ' loomItemWidth-' + loomSize;
                   if(r > 0) {
-                    if( (c % 2 == 0) && (r % 2 == 1) ) { loomItem.innerHTML = '—'; }
-                    else if( (c % 2 == 1) && (r % 2 == 0) ) { loomItem.innerHTML = '—'; }
-                    else { loomItem.innerHTML = '|'; }
+                    if( (c % 2 == 0) && (r % 2 == 1) ) { loomItem.innerHTML = '<span class="item_direction">—</span>'; }
+                    else if( (c % 2 == 1) && (r % 2 == 0) ) { loomItem.innerHTML = '<span class="item_direction">—</span>'; }
+                    else { loomItem.innerHTML = '<span class="item_direction">|</span>'; }
                   }
                   loomRow.appendChild(loomItem);
               }
@@ -595,7 +619,7 @@
               if( c == 0 || r == 0 ) {
                   // Create a Loom RowSelector Inset Item
                   var loomInset = document.createElement('div');
-                  loomInset.innerHTML = c || r;
+                  loomInset.innerHTML = '<span class="inset_label">' + (c || r) + '</span>';
                   loomInset.className = 'loomSelectorInset';
                   loomItem.appendChild(loomInset);
               }
