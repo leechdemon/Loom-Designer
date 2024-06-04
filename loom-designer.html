@@ -13,7 +13,7 @@
   }
   
   
-    #colorSelectorFrames { width: fit-content; margin: auto; }  
+    #colorSelectorFrames { display: flow-root; width: 100%; min-height: 5rem; border: solid 1px gray; padding: 0.5rem; }  
     #loom { clear: both; width: 60%; margin: auto; }
     .closebox { background-color: white; border: solid; width: 1.25rem; height: 1.25rem; line-height: normal; text-align: center; padding: 0px; transition-duration: 0.25s; opacity: 0; }
     .colorSelectorFrame:hover .closebox { opacity: 1; }
@@ -40,7 +40,7 @@
   
     .loomItem { float: left; border: solid 1px black; text-align: center; }
     /* .loomItem, .loomSelectorInset { font-weight: 700; font-size: calc(var(--typeBaseSize) - 2px); line-height: 1.42; font-family: var(--typeBasePrimary),var(--typeBaseFallback); padding: 14px; } */
-    .loomItem, .loomSelectorInset { background-color: red; color: #ffffffcc; text-shadow: 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa }
+    .loomItem, .loomSelectorInset { background-color: white; color: #ffffffcc; text-shadow: 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa, 0px 0px 2px #000000aa }
     .loomSelectorInset { height: inherit; width: inherit; }
     #loomItem-0-0 { opacity: 0; }
     .loomRow-0 { margin-bottom: 0.5rem; }
@@ -220,8 +220,10 @@
         <div class="buttonRow">
             <p><strong>Color Options</strong></p>
             <button id="" class="btn btn--small" onclick="javascript:AddNewColorFrame();" style="background-color: #ed7b5a">Add Color</button>
+            <button class="btn btn--small" onclick="javascript:RemoveAllColors();" style="background-color: #aaaaaa">Remove All Colors</button>
             <button class="btn btn--small" onclick="javascript:RandomizeColors();" style="background-color: #aaaaaa">Randomize Colors</button>
-            <button class="btn btn--small" onclick="javascript:ClearSelection();" style="background-color: #aaaaaa">Clear Selection</button>          
+            <button class="btn btn--small" onclick="javascript:FillLoom();" style="background-color: #aaaaaa">Fill Loom</button>
+            <button class="btn btn--small" onclick="javascript:ClearHighlighted();" style="background-color: #aaaaaa">Clear Highlighted</button>
         </div>
 
         <div class="buttonRow">
@@ -437,795 +439,827 @@
         }
       }
     }
-    function ClearSelection() {
-      var highlightedDivs = document.getElementsByClassName('highlighted');
-      for(var x = 0; x < highlightedDivs.length; x++) {
-        highlightedDivs[x].classList.remove('highlighted');
-      }
+  function FillLoom() {
+    var colorId = document.getElementsByClassName('highlighted')[0].id.replace('colorSelectorFrame','');
 
-      /* Remove event listeners */
+    /* For each color... */
+    var colorTotal = document.getElementsByClassName('colorSelectorFrame').length;
+    for( var c = colorTotal; c >= 0; c-- ) {
+
+      /* For each item in that color... */
+      var colorGroup = document.getElementsByClassName('color-'+c);
+      for( var i = colorGroup.length-1; i >= 0; i-- ) {
+        if( colorGroup[i].parentElement.id == 'colorSelectorFrames' ) { /* Do nothing */ }
+        else { colorGroup[i].classList.replace('color-'+c,'color-'+colorId); }
+      }
+      
+    }
+
+    /* Draw to apply changes */
+    RecolorLoom();
+  }
+  function RemoveAllColors() {
+    var colorTotal = document.getElementsByClassName( 'colorSelectorFrame' ).length;
+    for( var c = colorTotal; c > 0; c-- ) {
+      CloseFrame(c);
+    }
+  }
+  function ClearHighlighted() {
+    var highlightedDivs = document.getElementsByClassName('highlighted');
+    for(var x = 0; x < highlightedDivs.length; x++) {
+      highlightedDivs[x].classList.remove('highlighted');
+    }
+
+    /* Remove event listeners */
+    var old_element = document.getElementById("colorSelectorRow");
+    var new_element = old_element.cloneNode(true);
+    old_element.parentNode.replaceChild(new_element, old_element);
+
+    // var old_element = document.getElementById("loom");
+    // var new_element = old_element.cloneNode(true);
+    // old_element.parentNode.replaceChild(new_element, old_element);
+  }
+  function CloseFrame( id ) {
+    document.getElementById('colorSelectorFrame' + id).remove();
+      
+    var colorDivs = document.getElementsByClassName('color-'+id);
+    for( var div = colorDivs.length - 1; div >= 0 ; div-- ) {
+      var thisDiv = colorDivs[div];
+      thisDiv.style.backgroundColor = 'unset';
+      thisDiv.classList.replace('color-'+id,'color-0');
+    }
+
+    ResortColorClassIds( id );
+  }
+  function CountLoops() {
+    var anythingOos = false;
+    /* For each colorSelectorFrame in use... */
+    var colorSelectorFrames = document.getElementsByClassName('colorSelectorFrame');
+    for(var x = 0; x < colorSelectorFrames.length; x++ ) {
+      var colorGroup = document.getElementsByClassName('color-' + (x+1) );
+      var colorName = "";
+      var loops = 0;
+
+      for(var y = 0; y < colorGroup.length; y++) {
+        if( colorGroup[y].parentNode.classList.contains("loomRowSelector") ) {
+          loops++;
+        }
+        if( colorGroup[y].parentNode.parentNode.classList.contains("loomColSelector") ) {
+          loops++;
+        }
+      }
+      var colorSelectorButton = document.getElementById('colorSelector' + (x+1) );
+      colorSelectorButton.innerHTML = loops.toString();
+
+      var product = GetProductFromRGB( colorSelectorFrames[x].firstChild.style.backgroundColor );
+      var colorNameDiv = document.getElementById('colorName-' + (x+1) );
+      colorNameDiv.innerHTML = product.name;
+
+      // var loopsPerUnit = 160;
+      // if(loops < loopsPerUnit) {
+
+      colorSelectorFrames[x].classList.remove('item_instock', 'item_oos', 'item_unchecked');
+      
+      /* Compare the current color frame to all colorSelectorItems by color */
+      var frameColor = colorSelectorFrames[x].firstChild.style.backgroundColor;
+      var colorSelectorItems = document.getElementsByClassName('colorSelectorItem');
+      for( var c = 0; c < colorSelectorItems.length; c++ ) {
+        if( colorSelectorItems[c].style.backgroundColor == frameColor ) {
+          /* If the colorSelectorItem matches the frameColor... */
+          for(var cl = 0; cl < colorSelectorItems[c].classList.length; cl++ ) {
+            if( colorSelectorItems[c].classList[cl] == 'item_unchecked' ) {
+              colorSelectorFrames[x].classList.add('item_unchecked');
+              anythingOos = true; }
+            if( colorSelectorItems[c].classList[cl] == 'item_instock' ) {
+              colorSelectorFrames[x].classList.add('item_instock'); }
+            if( colorSelectorItems[c].classList[cl] == 'item_oos' ) {
+              colorSelectorFrames[x].classList.add('item_oos');
+              anythingOos = true; }
+          }
+          
+          break;
+        }
+      }
+      // document.getElementById('colorSelectorFrames')[x].style.backgroundColor;
+
+      // if(loops < loopsPerUnit) {
+      //   anythingOos = true;
+      //   loopCountDiv.classList.add('item_oos');
+      // }
+      // if( loops > loopsPerUnit ) {
+      //   loopCountDiv.classList.remove('item_oos');
+      // }
+    }
+
+    if( anythingOos ) { document.getElementById('colorSelectorFrame_oos').style.display = 'block'; }
+    else { document.getElementById('colorSelectorFrame_oos').style.display = 'none'; }
+  }
+  function CreateLoom() {  // Never call this directly, or you miss Event Handlers
+      var loom = document.getElementById('loom');
+
+      loom.innerHTML = '';
+
+      for (let r = 0; r <= loomSize; r++) {
+          if( r == 0 ) {
+              // Create a Loom ColSelector Row
+              var loomRow = document.createElement('div');
+              loomRow.id = 'loomRow-' + r;
+              loomRow.className = 'loomColSelector loomItemHeight-' + loomSize;
+          } else {
+              // Create a Loom Row
+              var loomRow = document.createElement('div');
+              loomRow.id = 'loomRow-' + r;
+              loomRow.className = 'loomRow loomItemHeight-' + loomSize;
+          }
+
+          for (let c = 0; c <= loomSize; c++)  {
+              if( c == 0 ) {
+                  // Create a Loom RowSelector Item
+                  var loomItem = document.createElement('div');
+                  loomItem.id = 'loomItem-' +r+ '-' + c;
+                  loomItem.className = 'loomRowSelector loomItemWidth-' + loomSize;
+                  loomRow.appendChild(loomItem);
+              } else {
+                  // Create a Loom Item
+                  var loomItem = document.createElement('div');
+                  loomItem.id = 'loomItem-' +r+ '-' + c;
+                  loomItem.className = 'loomItem loomCol-' +c+' loomRow-' +r+ ' loomItemWidth-' + loomSize;
+                  if(r > 0) {
+                    if( (c % 2 == 0) && (r % 2 == 1) ) { loomItem.innerHTML = '—'; }
+                    else if( (c % 2 == 1) && (r % 2 == 0) ) { loomItem.innerHTML = '—'; }
+                    else { loomItem.innerHTML = '|'; }
+                  }
+                  loomRow.appendChild(loomItem);
+              }
+
+              if( c == 0 || r == 0 ) {
+                  // Create a Loom RowSelector Inset Item
+                  var loomInset = document.createElement('div');
+                  loomInset.innerHTML = c || r;
+                  loomInset.className = 'loomSelectorInset';
+                  loomItem.appendChild(loomInset);
+              }
+          }
+
+          loom.appendChild(loomRow);
+      }
+  }
+  function GetProductFromRGB(rgb) {
+    var product = [];
+    var hexColor = '';
+    
+    rgb = rgb.split("(")[1].split(")")[0].split(", ");
+    
+    for( item = 0; item < 3; item++) {
+      /* calculate RGB */
+      hexColor += parseInt( rgb[item] ).toString(16);
+
+      /* fix "leading 0's" in hex conversion */
+      if(hexColor.length == 1) {
+        hexColor = '0' + hexColor;
+      }
+    }
+    
+    // Use Hex to determine correct product variants
+    switch( true ) {
+      //7" Loom
+      case (loomSize == 18) && (hexColor == "887255"):
+        product.id = "39980044451915";
+        product.name = "Autumn";
+        break;
+      case (loomSize == 18) && (hexColor == "213996"):
+        product.id = "39980044517451";
+        product.name = "Blue";
+        break;
+      case (loomSize == 18) && (hexColor == "38383a"):
+        product.id = "39980044615755";
+        product.name = "Black";
+        break;
+      case (loomSize == 18) && (hexColor == "532025"):
+        product.id = "39980044681291";
+        product.name = "Burgundy";
+        break;
+      case (loomSize == 18) && (hexColor == "f57b99"):
+        product.id = "39980044714059";
+        product.name = "Carnation";
+        break;
+      case (loomSize == 18) && (hexColor == "fbed94"):
+        product.id = "39980044746827";
+        product.name = "Daffodil";
+        break;
+      case (loomSize == 18) && (hexColor == "3c1d14"):
+        product.id = "39980044845131";
+        product.name = "Chocolate";
+        break;
+      case (loomSize == 18) && (hexColor == "1c233e"):
+        product.id = "39980044943435";
+        product.name = "Dark Navy";
+        break;
+
+      case (loomSize == 18) && (hexColor == "d7c8a9"):
+        product.id = "39980045008971";
+        product.name = "Flax";
+        break;
+      case (loomSize == 18) && (hexColor == "0e6f2e"):
+        product.id = "39980045041739";
+        product.name = "Green";
+        break;
+      case (loomSize == 18) && (hexColor == "b194c3"):
+        product.id = "39980045140043";
+        product.name = "Hydrangea";
+        break;
+      case (loomSize == 18) && (hexColor == "b0d947"):
+        product.id = "39980045205579";
+        product.name = "Lime";
+        break;
+      case (loomSize == 18) && (hexColor == "859855"):
+        product.id = "39980045271115";
+        product.name = "Leaf";
+        break;
+      case (loomSize == 18) && (hexColor == "9a86b8"):
+        product.id = "39980045303883";
+        product.name = "Lavender";
+        break;
+      case (loomSize == 18) && (hexColor == "d74d21"):
+        product.id = "39980045631563";
+        product.name = "Orange";
+        break;
+      case (loomSize == 18) && (hexColor == "775d2d"):
+        product.id = "39980045434955";
+        product.name = "Ochre";
+        break;
+
+      case (loomSize == 18) && (hexColor == "4d1e96"):
+        product.id = "39980045926475";
+        product.name = "Purple";
+        break;
+      case (loomSize == 18) && (hexColor == "92b6cb"):
+        product.id = "39980045992011";
+        product.name = "Powder Blue";
+        break;
+      case (loomSize == 18) && (hexColor == "04897f"):
+        product.id = "39980046024779";
+        product.name = "Peacock";
+        break;
+      case (loomSize == 18) && (hexColor == "8c2f9a"):
+        product.id = "39980046221387";
+        product.name = "Plum";
+        break;
+      case (loomSize == 18) && (hexColor == "04322c"):
+        product.id = "39980046319691";
+        product.name = "Pine";
+        break;
+      case (loomSize == 18) && (hexColor == "f840ab"):
+        product.id = "39980046090315";
+        product.name = "Pink";
+        break;
+      case (loomSize == 18) && (hexColor == "53545a"):
+        product.id = "39980046352459";
+        product.name = "Pewter";
+        break;
+      case (loomSize == 18) && (hexColor == "971524"):
+        product.id = "39980046385227";
+        product.name = "Red";
+        break;
+
+      case (loomSize == 18) && (hexColor == "5ba9c4"):
+        product.id = "39980046417995";
+        product.name = "Robin's Egg";
+        break;
+      case (loomSize == 18) && (hexColor == "e95f5f"):
+        product.id = "39980046483531";
+        product.name = "Salmon";
+        break;
+      case (loomSize == 18) && (hexColor == "984e38"):
+        product.id = "39980046516299";
+        product.name = "Spice";
+        break;
+      case (loomSize == 18) && (hexColor == "a5a5a8"):
+        product.id = "39980046549067";
+        product.name = "Silver";
+        break;
+      case (loomSize == 18) && (hexColor == "06a0cd"):
+        product.id = "39980046581835";
+        product.name = "Turquoise";
+        break;
+      case (loomSize == 18) && (hexColor == "e1723b"):
+        product.id = "39980046647371";
+        product.name = "Tiger Lily";
+        break;
+      case (loomSize == 18) && (hexColor == "fefefe"):
+        product.id = "39980046712907";
+        product.name = "White";
+        break;
+      case (loomSize == 18) && (hexColor == "445041"):
+        product.id = "39980046745675";
+        product.name = "Willow";
+        break;
+
+      case (loomSize == 18) && (hexColor == "fdf5e9"):
+        product.id = "39980046811211";
+        product.name = "Winter White";
+        break;
+      case (loomSize == 18) && (hexColor == "f3b814"):
+        product.id = "39980046843979";
+        product.name = "Yellow";
+        break;
+
+      // 10" Loom
+      case (loomSize == 27) && (hexColor == "887255"):
+        product.id = "32648134099019";
+        product.name = "Autumn";
+        break;
+      case (loomSize == 27) && (hexColor == "213996"):
+        product.id = "32648133738571";
+        product.name = "Blue";
+        break;
+      case (loomSize == 27) && (hexColor == "38383a"):
+        product.id = "32648134754379";
+        product.name = "Black";
+        break;
+      case (loomSize == 27) && (hexColor == "532025"):
+        product.id = "32648134164555";
+        product.name = "Burgundy";
+        break;
+      case (loomSize == 27) && (hexColor == "f57b99"):
+        product.id = "32648134688843";
+        product.name = "Carnation";
+        break;
+      case (loomSize == 27) && (hexColor == "fbed94"):
+        product.id = "32648134590539";
+        product.name = "Daffodil";
+        break;
+      case (loomSize == 27) && (hexColor == "3c1d14"):
+        product.id = "32648134295627";
+        product.name = "Chocolate";
+        break;
+      case (loomSize == 27) && (hexColor == "1c233e"):
+        product.id = "32648134230091";
+        product.name = "Dark Navy";
+        break;
+
+      case (loomSize == 27) && (hexColor == "d7c8a9"):
+        product.id = "32648134361163";
+        product.name = "Flax";
+        break;
+      case (loomSize == 27) && (hexColor == "0e6f2e"):
+        product.id = "32648133836875";
+        product.name = "Green";
+        break;
+      case (loomSize == 27) && (hexColor == "b194c3"):
+        product.id = "32648134459467";
+        product.name = "Hydrangea";
+        break;
+      case (loomSize == 27) && (hexColor == "b0d947"):
+        product.id = "32648133869643";
+        product.name = "Lime";
+        break;
+      case (loomSize == 27) && (hexColor == "859855"):
+        product.id = "32648134492235";
+        product.name = "Leaf";
+        break;
+      case (loomSize == 27) && (hexColor == "9a86b8"):
+        product.id = "32648134525003";
+        product.name = "Lavender";
+        break;
+      case (loomSize == 27) && (hexColor == "d74d21"):
+        product.id = "32648133935179";
+        product.name = "Orange";
+        break;
+      case (loomSize == 27) && (hexColor == "775d2d"):
+        product.id = "32648134328395";
+        product.name = "Ochre";
+        break;
+
+      case (loomSize == 27) && (hexColor == "4d1e96"):
+        product.id = "32648133673035";
+        product.name = "Purple";
+        break;
+      case (loomSize == 27) && (hexColor == "92b6cb"):
+        product.id = "32648134721611";
+        product.name = "Powder Blue";
+        break;
+      case (loomSize == 27) && (hexColor == "04897f"):
+        product.id = "32648133804107";
+        product.name = "Peacock";
+        break;
+      case (loomSize == 27) && (hexColor == "8c2f9a"):
+        product.id = "32648133705803";
+        product.name = "Plum";
+        break;
+      case (loomSize == 27) && (hexColor == "04322c"):
+        product.id = "32648134426699";
+        product.name = "Pine";
+        break;
+      case (loomSize == 27) && (hexColor == "f840ab"):
+        product.id = "32648134000715";
+        product.name = "Pink";
+        break;
+      case (loomSize == 27) && (hexColor == "53545a"):
+        product.id = "32648134262859";
+        product.name = "Pewter";
+        break;
+      case (loomSize == 27) && (hexColor == "971524"):
+        product.id = "32648133967947";
+        product.name = "Red";
+        break;
+
+      case (loomSize == 27) && (hexColor == "5ba9c4"):
+        product.id = "32648134557771";
+        product.name = "Robin's Egg";
+        break;
+      case (loomSize == 27) && (hexColor == "e95f5f"):
+        product.id = "32648134033483";
+        product.name = "Salmon";
+        break;
+      case (loomSize == 27) && (hexColor == "984e38"):
+        product.id = "32648134393931";
+        product.name = "Spice";
+        break;
+      case (loomSize == 27) && (hexColor == "a5a5a8"):
+        product.id = "32648134066251";
+        product.name = "Silver";
+        break;
+      case (loomSize == 27) && (hexColor == "06a0cd"):
+        product.id = "32648133771339";
+        product.name = "Turquoise";
+        break;
+      case (loomSize == 27) && (hexColor == "e1723b"):
+        product.id = "32648134623307";
+        product.name = "Tiger Lily";
+        break;
+      case (loomSize == 27) && (hexColor == "fefefe"):
+        product.id = "32648134656075";
+        product.name = "White";
+        break;
+      case (loomSize == 27) && (hexColor == "445041"):
+        product.id = "32648134131787";
+        product.name = "Willow";
+        break;
+        
+      case (loomSize == 27) && (hexColor == "fdf5e9"):
+        product.id = "32648134197323";
+        product.name = "Winter White";
+        break;
+      case (loomSize == 27) && (hexColor == "f3b814"):
+        product.id = "32648133902411";
+        product.name = "Yellow";
+        break;
+    }
+    
+    return product;
+  }
+  function LoomSize(size) {
+    loomSize = size;
+    
+    // let assign = false;
+    // if( document.getElementById('RedrawLoomOnColorChange').checked ) { assign = true; }
+    // RedrawLoom(assign);
+    RedrawLoom(true);
+
+    document.getElementById('loomSize-18').style.backgroundColor = '#aaaaaa';
+    document.getElementById('loomSize-27').style.backgroundColor = '#aaaaaa';
+    document.getElementById('loomSize-' + size).style.backgroundColor = '#ed7b5a';
+
+    CheckShopifyInventory();
+  }
+  function PickColor(id) {
       var old_element = document.getElementById("colorSelectorRow");
       var new_element = old_element.cloneNode(true);
       old_element.parentNode.replaceChild(new_element, old_element);
 
-      // var old_element = document.getElementById("loom");
-      // var new_element = old_element.cloneNode(true);
-      // old_element.parentNode.replaceChild(new_element, old_element);
-    }
-    function CloseFrame( id ) {
-      document.getElementById('colorSelectorFrame' + id).remove();
-
-      ResortColorClassIds( id );
-    }
-    function CountLoops() {
-      var anythingOos = false;
-      /* For each colorSelectorFrame in use... */
       var colorSelectorFrames = document.getElementsByClassName('colorSelectorFrame');
-      for(var x = 0; x < colorSelectorFrames.length; x++ ) {
-        var colorGroup = document.getElementsByClassName('color-' + (x+1) );
-        var colorName = "";
-        var loops = 0;
-
-        for(var y = 0; y < colorGroup.length; y++) {
-          if( colorGroup[y].parentNode.classList.contains("loomRowSelector") ) {
-            loops++;
-          }
-          if( colorGroup[y].parentNode.parentNode.classList.contains("loomColSelector") ) {
-            loops++;
-          }
-        }
-        var colorSelectorButton = document.getElementById('colorSelector' + (x+1) );
-        colorSelectorButton.innerHTML = loops.toString();
-
-        var product = GetProductFromRGB( colorSelectorFrames[x].firstChild.style.backgroundColor );
-        var colorNameDiv = document.getElementById('colorName-' + (x+1) );
-        colorNameDiv.innerHTML = product.name;
-
-        // var loopsPerUnit = 160;
-        // if(loops < loopsPerUnit) {
-
-        colorSelectorFrames[x].classList.remove('item_instock', 'item_oos', 'item_unchecked');
-        
-        /* Compare the current color frame to all colorSelectorItems by color */
-        var frameColor = colorSelectorFrames[x].firstChild.style.backgroundColor;
-        var colorSelectorItems = document.getElementsByClassName('colorSelectorItem');
-        for( var c = 0; c < colorSelectorItems.length; c++ ) {
-          if( colorSelectorItems[c].style.backgroundColor == frameColor ) {
-            /* If the colorSelectorItem matches the frameColor... */
-            for(var cl = 0; cl < colorSelectorItems[c].classList.length; cl++ ) {
-              if( colorSelectorItems[c].classList[cl] == 'item_unchecked' ) {
-                colorSelectorFrames[x].classList.add('item_unchecked');
-                anythingOos = true; }
-              if( colorSelectorItems[c].classList[cl] == 'item_instock' ) {
-                colorSelectorFrames[x].classList.add('item_instock'); }
-              if( colorSelectorItems[c].classList[cl] == 'item_oos' ) {
-                colorSelectorFrames[x].classList.add('item_oos');
-                anythingOos = true; }
-            }
-            
-            break;
-          }
-        }
-        // document.getElementById('colorSelectorFrames')[x].style.backgroundColor;
-
-        // if(loops < loopsPerUnit) {
-        //   anythingOos = true;
-        //   loopCountDiv.classList.add('item_oos');
-        // }
-        // if( loops > loopsPerUnit ) {
-        //   loopCountDiv.classList.remove('item_oos');
-        // }
+      for( c = 0; c < colorSelectorFrames.length; c++ ) {
+        colorSelectorFrames[c].classList.remove('highlighted');
       }
+      document.getElementById('colorSelectorFrame' + id).classList.add('highlighted');
 
-      if( anythingOos ) { document.getElementById('colorSelectorFrame_oos').style.display = 'block'; }
-      else { document.getElementById('colorSelectorFrame_oos').style.display = 'none'; }
-    }
-    function CreateLoom() {  // Never call this directly, or you miss Event Handlers
-        var loom = document.getElementById('loom');
+      document.getElementById('colorSelectorRow').addEventListener('click', function SelectColor(e) {
+          var target = e.target;
+          var colorSelector = document.getElementById('colorSelector'+id);
+          if (target.className.indexOf('colorSelectorItem') > -1 ) {
+              colorSelector.style.backgroundColor = target.style.backgroundColor;
+          }
 
-        loom.innerHTML = '';
-
-        for (let r = 0; r <= loomSize; r++) {
-            if( r == 0 ) {
-                // Create a Loom ColSelector Row
-                var loomRow = document.createElement('div');
-                loomRow.id = 'loomRow-' + r;
-                loomRow.className = 'loomColSelector loomItemHeight-' + loomSize;
-            } else {
-                // Create a Loom Row
-                var loomRow = document.createElement('div');
-                loomRow.id = 'loomRow-' + r;
-                loomRow.className = 'loomRow loomItemHeight-' + loomSize;
-            }
-
-            for (let c = 0; c <= loomSize; c++)  {
-                if( c == 0 ) {
-                    // Create a Loom RowSelector Item
-                    var loomItem = document.createElement('div');
-                    loomItem.id = 'loomItem-' +r+ '-' + c;
-                    loomItem.className = 'loomRowSelector loomItemWidth-' + loomSize;
-                    loomRow.appendChild(loomItem);
-                } else {
-                    // Create a Loom Item
-                    var loomItem = document.createElement('div');
-                    loomItem.id = 'loomItem-' +r+ '-' + c;
-                    loomItem.className = 'loomItem loomCol-' +c+' loomRow-' +r+ ' loomItemWidth-' + loomSize;
-                    if(r > 0) {
-                      if( (c % 2 == 0) && (r % 2 == 1) ) { loomItem.innerHTML = '—'; }
-                      else if( (c % 2 == 1) && (r % 2 == 0) ) { loomItem.innerHTML = '—'; }
-                      else { loomItem.innerHTML = '|'; }
-                    }
-                    loomRow.appendChild(loomItem);
-                }
-
-                if( c == 0 || r == 0 ) {
-                    // Create a Loom RowSelector Inset Item
-                    var loomInset = document.createElement('div');
-                    loomInset.innerHTML = c || r;
-                    loomInset.className = 'loomSelectorInset';
-                    loomItem.appendChild(loomInset);
-                }
-            }
-
-            loom.appendChild(loomRow);
-        }
-    }
-    function GetProductFromRGB(rgb) {
+          RecolorLoom();
+      });
+  }
+  function RandomizeColors(index) {
+      var colorSelectorItems = document.getElementsByClassName('colorSelectorItem');
+      var colorSelectorFrames = document.getElementsByClassName('colorSelectorFrame');
       var product = [];
-      var hexColor = '';
+      var colorNameDiv = '';
       
-      rgb = rgb.split("(")[1].split(")")[0].split(", ");
-      
-      for( item = 0; item < 3; item++) {
-        /* calculate RGB */
-        hexColor += parseInt( rgb[item] ).toString(16);
+      if(index) {
+        var randomIndex = Math.floor( Math.random() * colorSelectorItems.length );
+        document.getElementById('colorSelector'+index).style.backgroundColor = colorSelectorItems[randomIndex].style.backgroundColor;
 
-        /* fix "leading 0's" in hex conversion */
-        if(hexColor.length == 1) {
-          hexColor = '0' + hexColor;
-        }
+        colorNameDiv = document.getElementById('colorName-' + index );
+        product = GetProductFromRGB( colorSelectorItems[index].style.backgroundColor );
       }
-      
-      // Use Hex to determine correct product variants
-      switch( true ) {
-        //7" Loom
-        case (loomSize == 18) && (hexColor == "887255"):
-          product.id = "39980044451915";
-          product.name = "Autumn";
-          break;
-        case (loomSize == 18) && (hexColor == "213996"):
-          product.id = "39980044517451";
-          product.name = "Blue";
-          break;
-        case (loomSize == 18) && (hexColor == "38383a"):
-          product.id = "39980044615755";
-          product.name = "Black";
-          break;
-        case (loomSize == 18) && (hexColor == "532025"):
-          product.id = "39980044681291";
-          product.name = "Burgundy";
-          break;
-        case (loomSize == 18) && (hexColor == "f57b99"):
-          product.id = "39980044714059";
-          product.name = "Carnation";
-          break;
-        case (loomSize == 18) && (hexColor == "fbed94"):
-          product.id = "39980044746827";
-          product.name = "Daffodil";
-          break;
-        case (loomSize == 18) && (hexColor == "3c1d14"):
-          product.id = "39980044845131";
-          product.name = "Chocolate";
-          break;
-        case (loomSize == 18) && (hexColor == "1c233e"):
-          product.id = "39980044943435";
-          product.name = "Dark Navy";
-          break;
-
-        case (loomSize == 18) && (hexColor == "d7c8a9"):
-          product.id = "39980045008971";
-          product.name = "Flax";
-          break;
-        case (loomSize == 18) && (hexColor == "0e6f2e"):
-          product.id = "39980045041739";
-          product.name = "Green";
-          break;
-        case (loomSize == 18) && (hexColor == "b194c3"):
-          product.id = "39980045140043";
-          product.name = "Hydrangea";
-          break;
-        case (loomSize == 18) && (hexColor == "b0d947"):
-          product.id = "39980045205579";
-          product.name = "Lime";
-          break;
-        case (loomSize == 18) && (hexColor == "859855"):
-          product.id = "39980045271115";
-          product.name = "Leaf";
-          break;
-        case (loomSize == 18) && (hexColor == "9a86b8"):
-          product.id = "39980045303883";
-          product.name = "Lavender";
-          break;
-        case (loomSize == 18) && (hexColor == "d74d21"):
-          product.id = "39980045631563";
-          product.name = "Orange";
-          break;
-        case (loomSize == 18) && (hexColor == "775d2d"):
-          product.id = "39980045434955";
-          product.name = "Ochre";
-          break;
-
-        case (loomSize == 18) && (hexColor == "4d1e96"):
-          product.id = "39980045926475";
-          product.name = "Purple";
-          break;
-        case (loomSize == 18) && (hexColor == "92b6cb"):
-          product.id = "39980045992011";
-          product.name = "Powder Blue";
-          break;
-        case (loomSize == 18) && (hexColor == "04897f"):
-          product.id = "39980046024779";
-          product.name = "Peacock";
-          break;
-        case (loomSize == 18) && (hexColor == "8c2f9a"):
-          product.id = "39980046221387";
-          product.name = "Plum";
-          break;
-        case (loomSize == 18) && (hexColor == "04322c"):
-          product.id = "39980046319691";
-          product.name = "Pine";
-          break;
-        case (loomSize == 18) && (hexColor == "f840ab"):
-          product.id = "39980046090315";
-          product.name = "Pink";
-          break;
-        case (loomSize == 18) && (hexColor == "53545a"):
-          product.id = "39980046352459";
-          product.name = "Pewter";
-          break;
-        case (loomSize == 18) && (hexColor == "971524"):
-          product.id = "39980046385227";
-          product.name = "Red";
-          break;
-
-        case (loomSize == 18) && (hexColor == "5ba9c4"):
-          product.id = "39980046417995";
-          product.name = "Robin's Egg";
-          break;
-        case (loomSize == 18) && (hexColor == "e95f5f"):
-          product.id = "39980046483531";
-          product.name = "Salmon";
-          break;
-        case (loomSize == 18) && (hexColor == "984e38"):
-          product.id = "39980046516299";
-          product.name = "Spice";
-          break;
-        case (loomSize == 18) && (hexColor == "a5a5a8"):
-          product.id = "39980046549067";
-          product.name = "Silver";
-          break;
-        case (loomSize == 18) && (hexColor == "06a0cd"):
-          product.id = "39980046581835";
-          product.name = "Turquoise";
-          break;
-        case (loomSize == 18) && (hexColor == "e1723b"):
-          product.id = "39980046647371";
-          product.name = "Tiger Lily";
-          break;
-        case (loomSize == 18) && (hexColor == "fefefe"):
-          product.id = "39980046712907";
-          product.name = "White";
-          break;
-        case (loomSize == 18) && (hexColor == "445041"):
-          product.id = "39980046745675";
-          product.name = "Willow";
-          break;
-
-        case (loomSize == 18) && (hexColor == "fdf5e9"):
-          product.id = "39980046811211";
-          product.name = "Winter White";
-          break;
-        case (loomSize == 18) && (hexColor == "f3b814"):
-          product.id = "39980046843979";
-          product.name = "Yellow";
-          break;
-
-        // 10" Loom
-        case (loomSize == 27) && (hexColor == "887255"):
-          product.id = "32648134099019";
-          product.name = "Autumn";
-          break;
-        case (loomSize == 27) && (hexColor == "213996"):
-          product.id = "32648133738571";
-          product.name = "Blue";
-          break;
-        case (loomSize == 27) && (hexColor == "38383a"):
-          product.id = "32648134754379";
-          product.name = "Black";
-          break;
-        case (loomSize == 27) && (hexColor == "532025"):
-          product.id = "32648134164555";
-          product.name = "Burgundy";
-          break;
-        case (loomSize == 27) && (hexColor == "f57b99"):
-          product.id = "32648134688843";
-          product.name = "Carnation";
-          break;
-        case (loomSize == 27) && (hexColor == "fbed94"):
-          product.id = "32648134590539";
-          product.name = "Daffodil";
-          break;
-        case (loomSize == 27) && (hexColor == "3c1d14"):
-          product.id = "32648134295627";
-          product.name = "Chocolate";
-          break;
-        case (loomSize == 27) && (hexColor == "1c233e"):
-          product.id = "32648134230091";
-          product.name = "Dark Navy";
-          break;
-
-        case (loomSize == 27) && (hexColor == "d7c8a9"):
-          product.id = "32648134361163";
-          product.name = "Flax";
-          break;
-        case (loomSize == 27) && (hexColor == "0e6f2e"):
-          product.id = "32648133836875";
-          product.name = "Green";
-          break;
-        case (loomSize == 27) && (hexColor == "b194c3"):
-          product.id = "32648134459467";
-          product.name = "Hydrangea";
-          break;
-        case (loomSize == 27) && (hexColor == "b0d947"):
-          product.id = "32648133869643";
-          product.name = "Lime";
-          break;
-        case (loomSize == 27) && (hexColor == "859855"):
-          product.id = "32648134492235";
-          product.name = "Leaf";
-          break;
-        case (loomSize == 27) && (hexColor == "9a86b8"):
-          product.id = "32648134525003";
-          product.name = "Lavender";
-          break;
-        case (loomSize == 27) && (hexColor == "d74d21"):
-          product.id = "32648133935179";
-          product.name = "Orange";
-          break;
-        case (loomSize == 27) && (hexColor == "775d2d"):
-          product.id = "32648134328395";
-          product.name = "Ochre";
-          break;
-
-        case (loomSize == 27) && (hexColor == "4d1e96"):
-          product.id = "32648133673035";
-          product.name = "Purple";
-          break;
-        case (loomSize == 27) && (hexColor == "92b6cb"):
-          product.id = "32648134721611";
-          product.name = "Powder Blue";
-          break;
-        case (loomSize == 27) && (hexColor == "04897f"):
-          product.id = "32648133804107";
-          product.name = "Peacock";
-          break;
-        case (loomSize == 27) && (hexColor == "8c2f9a"):
-          product.id = "32648133705803";
-          product.name = "Plum";
-          break;
-        case (loomSize == 27) && (hexColor == "04322c"):
-          product.id = "32648134426699";
-          product.name = "Pine";
-          break;
-        case (loomSize == 27) && (hexColor == "f840ab"):
-          product.id = "32648134000715";
-          product.name = "Pink";
-          break;
-        case (loomSize == 27) && (hexColor == "53545a"):
-          product.id = "32648134262859";
-          product.name = "Pewter";
-          break;
-        case (loomSize == 27) && (hexColor == "971524"):
-          product.id = "32648133967947";
-          product.name = "Red";
-          break;
-
-        case (loomSize == 27) && (hexColor == "5ba9c4"):
-          product.id = "32648134557771";
-          product.name = "Robin's Egg";
-          break;
-        case (loomSize == 27) && (hexColor == "e95f5f"):
-          product.id = "32648134033483";
-          product.name = "Salmon";
-          break;
-        case (loomSize == 27) && (hexColor == "984e38"):
-          product.id = "32648134393931";
-          product.name = "Spice";
-          break;
-        case (loomSize == 27) && (hexColor == "a5a5a8"):
-          product.id = "32648134066251";
-          product.name = "Silver";
-          break;
-        case (loomSize == 27) && (hexColor == "06a0cd"):
-          product.id = "32648133771339";
-          product.name = "Turquoise";
-          break;
-        case (loomSize == 27) && (hexColor == "e1723b"):
-          product.id = "32648134623307";
-          product.name = "Tiger Lily";
-          break;
-        case (loomSize == 27) && (hexColor == "fefefe"):
-          product.id = "32648134656075";
-          product.name = "White";
-          break;
-        case (loomSize == 27) && (hexColor == "445041"):
-          product.id = "32648134131787";
-          product.name = "Willow";
-          break;
-          
-        case (loomSize == 27) && (hexColor == "fdf5e9"):
-          product.id = "32648134197323";
-          product.name = "Winter White";
-          break;
-        case (loomSize == 27) && (hexColor == "f3b814"):
-          product.id = "32648133902411";
-          product.name = "Yellow";
-          break;
-      }
-      
-      return product;
-    }
-    function LoomSize(size) {
-      loomSize = size;
-      
-      // let assign = false;
-      // if( document.getElementById('RedrawLoomOnColorChange').checked ) { assign = true; }
-      // RedrawLoom(assign);
-      RedrawLoom(true);
-
-      document.getElementById('loomSize-18').style.backgroundColor = '#aaaaaa';
-      document.getElementById('loomSize-27').style.backgroundColor = '#aaaaaa';
-      document.getElementById('loomSize-' + size).style.backgroundColor = '#ed7b5a';
-
-      CheckShopifyInventory();
-    }
-    function PickColor(id) {
-        var old_element = document.getElementById("colorSelectorRow");
-        var new_element = old_element.cloneNode(true);
-        old_element.parentNode.replaceChild(new_element, old_element);
-
-        var colorSelectorFrames = document.getElementsByClassName('colorSelectorFrame');
-        for( c = 0; c < colorSelectorFrames.length; c++ ) {
-          colorSelectorFrames[c].classList.remove('highlighted');
-        }
-        document.getElementById('colorSelectorFrame' + id).classList.add('highlighted');
-
-        document.getElementById('colorSelectorRow').addEventListener('click', function SelectColor(e) {
-            var target = e.target;
-            var colorSelector = document.getElementById('colorSelector'+id);
-            if (target.className.indexOf('colorSelectorItem') > -1 ) {
-                colorSelector.style.backgroundColor = target.style.backgroundColor;
-            }
-
-            RecolorLoom();
-        });
-    }
-    function RandomizeColors(index) {
-        var colorSelectorItems = document.getElementsByClassName('colorSelectorItem');
-        var colorSelectorFrames = document.getElementsByClassName('colorSelectorFrame');
-        var product = [];
-        var colorNameDiv = '';
-        
-        if(index) {
+      else {
+        for(var i = 1; i <= colorSelectorFrames.length; i++) {
           var randomIndex = Math.floor( Math.random() * colorSelectorItems.length );
-          document.getElementById('colorSelector'+index).style.backgroundColor = colorSelectorItems[randomIndex].style.backgroundColor;
+          document.getElementById('colorSelector'+i).style.backgroundColor = colorSelectorItems[randomIndex].style.backgroundColor;
 
-          colorNameDiv = document.getElementById('colorName-' + index );
-          product = GetProductFromRGB( colorSelectorItems[index].style.backgroundColor );
+          colorNameDiv = document.getElementById('colorName-' + i );
+          product = GetProductFromRGB( colorSelectorItems[i].style.backgroundColor );
+        }
+      }
+      colorNameDiv.innerHTML = product.name;
+
+      ClearHighlighted();
+      RecolorLoom();
+  }
+  function ReassignColorClass(div, index) {
+    for(var x = 1; x <= document.getElementById('colorSelectorFrames').children.length; x++) {
+      div.classList.remove('color-' + x);
+    }
+    div.classList.add('color-'+index);
+    CountLoops();
+  }
+  function RecolorLoom() {
+    for(var id = 1; id <= document.getElementById('colorSelectorFrames').children.length; id++) {
+      var colorItems = document.getElementsByClassName('color-' + id);
+      for ( var i = 0; i < colorItems.length; i++ ) {
+        if( colorItems[i].classList.contains('colorSelectorFrame') ) {
+          colorItems[i].children[0].style.backgroundColor = document.getElementById('colorSelectorFrame' + id ).firstChild.style.backgroundColor;
         }
         else {
-          for(var i = 1; i <= colorSelectorFrames.length; i++) {
-            var randomIndex = Math.floor( Math.random() * colorSelectorItems.length );
-            document.getElementById('colorSelector'+i).style.backgroundColor = colorSelectorItems[randomIndex].style.backgroundColor;
-
-            colorNameDiv = document.getElementById('colorName-' + i );
-            product = GetProductFromRGB( colorSelectorItems[i].style.backgroundColor );
-          }
-        }
-        colorNameDiv.innerHTML = product.name;
-
-        ClearSelection();
-        RecolorLoom();
-    }
-    function ReassignColorClass(div, index) {
-      for(var x = 1; x <= document.getElementById('colorSelectorFrames').children.length; x++) {
-        div.classList.remove('color-' + x);
-      }
-      div.classList.add('color-'+index);
-      CountLoops();
-    }
-    function RecolorLoom() {
-      for(var id = 1; id <= document.getElementById('colorSelectorFrames').children.length; id++) {
-        var colorItems = document.getElementsByClassName('color-' + id);
-        for ( var i = 0; i < colorItems.length; i++ ) {
-          if( colorItems[i].classList.contains('colorSelectorFrame') ) {
-            colorItems[i].children[0].style.backgroundColor = document.getElementById('colorSelectorFrame' + id ).firstChild.style.backgroundColor;
-          }
-          else {
-            colorItems[i].style.backgroundColor = document.getElementById('colorSelectorFrame'+ id ).firstChild.style.backgroundColor;
-          }
+          colorItems[i].style.backgroundColor = document.getElementById('colorSelectorFrame'+ id ).firstChild.style.backgroundColor;
         }
       }
+    }
 
+    CountLoops();
+  }
+  function RedrawLoom(assign) { // Use this for changes/refreshes
+      SelectPattern();
+      CreateLoom();
+      AssignLoomColors(assign);
       CountLoops();
-    }
-    function RedrawLoom(assign) { // Use this for changes/refreshes
-        SelectPattern();
-        CreateLoom();
-        AssignLoomColors(assign);
-        CountLoops();
-        SelectorHandlers();
-    }
-    function ResortColorClassIds( id ) {
-      var newColorIdArray = [];
-      var maxColors = 25;
+      SelectorHandlers();
+  }
+  function ResortColorClassIds( id ) {
+    var newColorIdArray = [];
+    var maxColors = 25;
+    
+    /* For Each Color... */
+    for(var x = 1; x <= maxColors; x++ ) {
+      var colorDivs = document.getElementsByClassName('color-'+x);
       
-      /* For Each Color... */
-      for(var x = 1; x <= maxColors; x++ ) {
-        var colorDivs = document.getElementsByClassName('color-'+x);
+      /* If there's a color-X match */
+      if( colorDivs.length > 0 ) {
         
-        /* If there's a color-X match */
-        if( colorDivs.length > 0 ) {
-          
-          /* Set newColorId */
-          var newColorId = 0;
-          if( x != id ) {
-            newColorIdArray[x] = x;
-            newColorId = newColorIdArray.filter(function( element ) {
-               return element !== undefined;
-            }).length;
-          }
-          
-          /* Reassign color-x */
-          for(var d = colorDivs.length - 1; d >= 0 ; d-- ) {
-            var thisDiv = colorDivs[d];
-            thisDiv.classList.replace( 'color-'+x, 'color-' + newColorId );
+        /* Set newColorId */
+        var newColorId = 0;
+        if( x != id ) {
+          newColorIdArray[x] = x;
+          newColorId = newColorIdArray.filter(function( element ) {
+             return element !== undefined;
+          }).length;
+        }
+        
+        /* Reassign color-x */
+        for(var d = colorDivs.length - 1; d >= 0 ; d-- ) {
+          var thisDiv = colorDivs[d];
+          thisDiv.classList.replace( 'color-'+x, 'color-' + newColorId );
 
-            /* Reassign colorSelectorFrameX */
-            if( thisDiv.id == 'colorSelectorFrame'+x ) {
+          /* Reassign colorSelectorFrameX */
+          if( thisDiv.id == 'colorSelectorFrame'+x ) {
 
-              /* If this is the old color, remove the frame */
-              if( x == 0 ) { thisDiv.remove(); }
-              else {
-                thisDiv.setAttribute("id", 'colorSelectorFrame'+newColorId);
-                var childDivs = thisDiv.children;
-                
-                for( var y = 0; y < childDivs.length; y++ ) {
-                  if( childDivs[y].id == 'colorSelector'+x ) {
-                    childDivs[y].setAttribute("id", 'colorSelector'+newColorId);
-                    childDivs[y].setAttribute("onclick", 'javascript:PickColor('+newColorId+');');
-                  }
-                  if( childDivs[y].id == 'colorName-'+x ) { childDivs[y].setAttribute("id", 'colorName-'+newColorId); }
-                  if( childDivs[y].id == 'closebox-'+x ) {
-                    childDivs[y].setAttribute("id", 'closebox-'+newColorId);
-                    childDivs[y].setAttribute("onclick", 'javascript:CloseFrame('+newColorId+');');
-                  }
+            /* If this is the old color, remove the frame */
+            if( x == 0 ) { thisDiv.remove(); }
+            else {
+              thisDiv.setAttribute("id", 'colorSelectorFrame'+newColorId);
+              var childDivs = thisDiv.children;
+              
+              for( var y = 0; y < childDivs.length; y++ ) {
+                if( childDivs[y].id == 'colorSelector'+x ) {
+                  childDivs[y].setAttribute("id", 'colorSelector'+newColorId);
+                  childDivs[y].setAttribute("onclick", 'javascript:PickColor('+newColorId+');');
+                }
+                if( childDivs[y].id == 'colorName-'+x ) { childDivs[y].setAttribute("id", 'colorName-'+newColorId); }
+                if( childDivs[y].id == 'closebox-'+x ) {
+                  childDivs[y].setAttribute("id", 'closebox-'+newColorId);
+                  childDivs[y].setAttribute("onclick", 'javascript:CloseFrame('+newColorId+');');
                 }
               }
-            } /* End Reassign colorSelectorFrameX */
-          
-          } /* End Reassign color-x */
-        } /* End If there's a color-X match */
+            }
+          } /* End Reassign colorSelectorFrameX */
         
-      } /* End For Each Color... */
-
-      /* Remove color-0 */
-      var colorDivs = document.getElementsByClassName('color-0');
-      for( var c = colorDivs.length - 1; c >= 0 ; c-- ) {
-        var thisDiv = colorDivs[c];
-        thisDiv.style.backgroundColor = null;
-        thisDiv.classList.remove('color-0');
-      }
-    }
-    function SelectorHandlers() {
-        var allLoomColSelectors = document.getElementById('loomRow-0').children;
-        for( s = 1; s < allLoomColSelectors.length; s++ ) {								
-            SelectorHandlers_Item(allLoomColSelectors[s].firstChild, 'col', s);
-        }
-
-        var allLoomRowSelectors = document.getElementsByClassName('loomRowSelector');
-        for( s = 1; s < allLoomRowSelectors.length; s++ ) {								
-            SelectorHandlers_Item(allLoomRowSelectors[s].firstChild, 'row', s);
-        }
-    }
-    function SelectorHandlers_Item(targetDiv, mode, rowNumber) { 
-        if( mode == 'col' ) {
-            var loomGroup = document.getElementsByClassName('loomCol-' + rowNumber);
-            var positionId = '1';
-            var startPos = 1;
-            var invertThread = 1;
-        }
-        if( mode == 'row' ) {
-            var loomGroup = document.getElementsByClassName('loomRow-' + rowNumber);
-            var positionId = '2';
-            var startPos = 0;
-            var invertThread = 0;
-        }
-
+        } /* End Reassign color-x */
+      } /* End If there's a color-X match */
       
-        targetDiv.addEventListener('mouseover', function highlight(e) {
-            // Add highlighting colors to loomItems
-            for( r = startPos; r < loomGroup.length; r++ ) {
-                var pieces = loomGroup[r].id.split('-');
+    } /* End For Each Color... */
 
-                if( rowNumber % 2 == invertThread ) {
-                    if( pieces[positionId] % 2 == 1) { loomGroup[r].style.boxShadow = "black 0px 0px 4px inset"; }
-                } else {
-                    if( pieces[positionId] % 2 == 0) { loomGroup[r].style.boxShadow = "black 0px 0px 4px inset"; }
-                }
-            }
-        });
-        targetDiv.addEventListener('click', function highlight(e) {
-            // Begin assigning colors to loomItems
-            var highlighted = document.getElementsByClassName('highlighted')[0];
-            
-          if( highlighted ) {
-            var highlightedId = highlighted.id.replace('colorSelectorFrame', '');
-          
-            for( r = startPos; r < loomGroup.length; r++ ) {
-                var pieces = loomGroup[r].id.split('-');
+    /* Remove color-0 */
+    // var colorDivs = document.getElementsByClassName('color-0');
+    // for( var c = colorDivs.length - 1; c >= 0 ; c-- ) {
+    //   var thisDiv = colorDivs[c];
+    //   thisDiv.style.backgroundColor = null;
+    //   thisDiv.classList.remove('color-0');
+    // }
+  }
+  function SelectorHandlers() {
+      var allLoomColSelectors = document.getElementById('loomRow-0').children;
+      for( s = 1; s < allLoomColSelectors.length; s++ ) {								
+          SelectorHandlers_Item(allLoomColSelectors[s].firstChild, 'col', s);
+      }
 
-                if( rowNumber % 2 == invertThread ) {
-                    if( pieces[positionId] % 2 == 1) {
-                      loomGroup[r].style.backgroundColor = document.getElementById('colorSelector'+highlightedId).style.backgroundColor;
-                      ReassignColorClass(loomGroup[r], highlightedId);
-                    }
-                } else {
-                    if( pieces[positionId] % 2 == 0) {
-                      loomGroup[r].style.backgroundColor = document.getElementById('colorSelector'+highlightedId).style.backgroundColor;
-                      ReassignColorClass(loomGroup[r], highlightedId);
-                    }
-                }
-            }
+      var allLoomRowSelectors = document.getElementsByClassName('loomRowSelector');
+      for( s = 1; s < allLoomRowSelectors.length; s++ ) {								
+          SelectorHandlers_Item(allLoomRowSelectors[s].firstChild, 'row', s);
+      }
+  }
+  function SelectorHandlers_Item(targetDiv, mode, rowNumber) { 
+      if( mode == 'col' ) {
+          var loomGroup = document.getElementsByClassName('loomCol-' + rowNumber);
+          var positionId = '1';
+          var startPos = 1;
+          var invertThread = 1;
+      }
+      if( mode == 'row' ) {
+          var loomGroup = document.getElementsByClassName('loomRow-' + rowNumber);
+          var positionId = '2';
+          var startPos = 0;
+          var invertThread = 0;
+      }
 
-            /* Recolor Insets */
-            var inset;
-            if( mode == 'col' ) {
-              inset = document.getElementById('loomItem-0-'+rowNumber).firstChild;
-            }
-            if( mode == 'row') {
-              inset = document.getElementById('loomItem-'+rowNumber+'-0').firstChild;
-            }
-            inset.style.backgroundColor = document.getElementById('colorSelector'+highlightedId).style.backgroundColor;
-            ReassignColorClass(inset, highlightedId);
+    
+      targetDiv.addEventListener('mouseover', function highlight(e) {
+          // Add highlighting colors to loomItems
+          for( r = startPos; r < loomGroup.length; r++ ) {
+              var pieces = loomGroup[r].id.split('-');
+
+              if( rowNumber % 2 == invertThread ) {
+                  if( pieces[positionId] % 2 == 1) { loomGroup[r].style.boxShadow = "black 0px 0px 4px inset"; }
+              } else {
+                  if( pieces[positionId] % 2 == 0) { loomGroup[r].style.boxShadow = "black 0px 0px 4px inset"; }
+              }
           }
-        });
-        targetDiv.addEventListener('mouseout', function SelectColor(e) {
-            // Remove highlighting colors from loomItems
-            for( r = startPos; r < loomGroup.length; r++ ) {
-                var pieces = loomGroup[r].id.split('-');
-                if( rowNumber % 2 == invertThread ) {
-                    if( pieces[positionId] % 2 == 1) { loomGroup[r].style.boxShadow = "unset"; }
-                } else {
-                    if( pieces[positionId] % 2 == 0) { loomGroup[r].style.boxShadow = "unset"; }
-                }
-            }
-        });
+      });
+      targetDiv.addEventListener('click', function highlight(e) {
+          // Begin assigning colors to loomItems
+          var highlighted = document.getElementsByClassName('highlighted')[0];
+          
+        if( highlighted ) {
+          var highlightedId = highlighted.id.replace('colorSelectorFrame', '');
+        
+          for( r = startPos; r < loomGroup.length; r++ ) {
+              var pieces = loomGroup[r].id.split('-');
+
+              if( rowNumber % 2 == invertThread ) {
+                  if( pieces[positionId] % 2 == 1) {
+                    loomGroup[r].style.backgroundColor = document.getElementById('colorSelector'+highlightedId).style.backgroundColor;
+                    ReassignColorClass(loomGroup[r], highlightedId);
+                  }
+              } else {
+                  if( pieces[positionId] % 2 == 0) {
+                    loomGroup[r].style.backgroundColor = document.getElementById('colorSelector'+highlightedId).style.backgroundColor;
+                    ReassignColorClass(loomGroup[r], highlightedId);
+                  }
+              }
+          }
+
+          /* Recolor Insets */
+          var inset;
+          if( mode == 'col' ) {
+            inset = document.getElementById('loomItem-0-'+rowNumber).firstChild;
+          }
+          if( mode == 'row') {
+            inset = document.getElementById('loomItem-'+rowNumber+'-0').firstChild;
+          }
+          inset.style.backgroundColor = document.getElementById('colorSelector'+highlightedId).style.backgroundColor;
+          ReassignColorClass(inset, highlightedId);
+        }
+      });
+      targetDiv.addEventListener('mouseout', function SelectColor(e) {
+          // Remove highlighting colors from loomItems
+          for( r = startPos; r < loomGroup.length; r++ ) {
+              var pieces = loomGroup[r].id.split('-');
+              if( rowNumber % 2 == invertThread ) {
+                  if( pieces[positionId] % 2 == 1) { loomGroup[r].style.boxShadow = "unset"; }
+              } else {
+                  if( pieces[positionId] % 2 == 0) { loomGroup[r].style.boxShadow = "unset"; }
+              }
+          }
+      });
+  }
+  function SelectPattern() {
+    switch( document.getElementById('loomPattern').value ) {
+      case ("loomPattern1"):
+        assignmentPattern = { loomColPegs:"101010101202020202", loomRowPegs:"10", pattern: ['111111111101010101','000000000202020202'] };
+        break;
+
+      case ("loomPattern2"):
+        assignmentPattern = { loomColPegs:"01", loomRowPegs:"0011", pattern: ["00","01","01","11"] };
+        break;
+
+      case ("loomPattern3"):
+        assignmentPattern = { loomColPegs:"000000111110000011111000000", loomRowPegs:"000000111110000011111000000", pattern: [] }
+        assignmentPattern.pattern.push("00000010101000001010100000");
+        assignmentPattern.pattern.push("00000001010000000101000000");
+        assignmentPattern.pattern.push("00000010101000001010100000");
+        assignmentPattern.pattern.push("00000001010000000101000000");
+        assignmentPattern.pattern.push("00000010101000001010100000");
+        assignmentPattern.pattern.push("00000001010000000101000000");
+
+        assignmentPattern.pattern.push("010101111111010111111101010");
+        assignmentPattern.pattern.push("101010111110101011111010101");
+        assignmentPattern.pattern.push("010101111111010111111101010");
+        assignmentPattern.pattern.push("101010111110101011111010101");
+        assignmentPattern.pattern.push("010101111111010111111101010");
+
+        assignmentPattern.pattern.push("00000010101000001010100000");
+        assignmentPattern.pattern.push("00000001010000000101000000");
+        assignmentPattern.pattern.push("00000010101000001010100000");
+        assignmentPattern.pattern.push("00000001010000000101000000");
+        assignmentPattern.pattern.push("00000010101000001010100000");
+
+        assignmentPattern.pattern.push("010101111111010111111101010");
+        assignmentPattern.pattern.push("101010111110101011111010101");
+        assignmentPattern.pattern.push("010101111111010111111101010");
+        assignmentPattern.pattern.push("101010111110101011111010101");
+        assignmentPattern.pattern.push("010101111111010111111101010");
+
+        assignmentPattern.pattern.push("00000010101000001010100000");
+        assignmentPattern.pattern.push("00000001010000000101000000");
+        assignmentPattern.pattern.push("00000010101000001010100000");
+        assignmentPattern.pattern.push("00000001010000000101000000");
+        assignmentPattern.pattern.push("00000010101000001010100000");
+        assignmentPattern.pattern.push("00000001010000000101000000");
+        break;
+
+      case ("loomPattern4"):
+        assignmentPattern = { loomColPegs:"001122", loomRowPegs:"001122", pattern: ["001020","000102","011121","101112","0212220","2021222"] };
+        break;
+
+      case ("loomPattern5"):
+        assignmentPattern = { loomColPegs:"0", loomRowPegs:"111222233334444555566667777", pattern: ["01", "10", "01", "02", "20", "02", "20", "03", "30", "03", "30", "04", "40", "04", "40", "05", "50", "05", "50", "06", "60", "06", "60", "07", "70", "07", "70" ] };
+        break;
+
+      case ("loomPattern6"):
+        assignmentPattern = { loomColPegs:"01", loomRowPegs:"01", pattern: ["0", "1"] };
+        break;
+
+      // case ("loomPattern7"):
+      //   assignmentPattern = { loomColPegs:"01234", loomRowPegs:"10432", pattern: ["012040003", "0103000204", "0420001034", "3133303234", "0222421232","1113101214","0020401030","41434042444","0323431333","2123202224"] };
+      //   break;
+
+      // case ("loomPattern8"):
+      //   assignmentPattern = { loomColPegs:"", loomRowPegs:"", pattern: ["", ""] };
+      //   break;
+
+      // case ("loomPattern9"):
+      //   assignmentPattern = { loomColPegs:"", loomRowPegs:"", pattern: ["", ""] };
+      //   break;
+
+      // case ("loomPattern10"):
+      //   assignmentPattern = { loomColPegs:"", loomRowPegs:"", pattern: ["", ""] };
+      //   break;
+
+      // case ("loomPattern11"):
+      //   assignmentPattern = { loomColPegs:"", loomRowPegs:"", pattern: ["", ""] };
+      //   break;
+
+      // case ("loomPattern12"):
+      //   assignmentPattern = { loomColPegs:"", loomRowPegs:"", pattern: ["", ""] };
+      //   break;
     }
-    function SelectPattern() {
-      switch( document.getElementById('loomPattern').value ) {
-        case ("loomPattern1"):
-          assignmentPattern = { loomColPegs:"101010101202020202", loomRowPegs:"10", pattern: ['111111111101010101','000000000202020202'] };
-          break;
 
-        case ("loomPattern2"):
-          assignmentPattern = { loomColPegs:"01", loomRowPegs:"0011", pattern: ["00","01","01","11"] };
-          break;
+    var colorSelectorFrames = document.getElementById('colorSelectorFrames');
+    var allFrames = document.getElementsByClassName('colorSelectorFrame');
+    var allPegs = assignmentPattern.loomColPegs + assignmentPattern.loomRowPegs;
 
-        case ("loomPattern3"):
-          assignmentPattern = { loomColPegs:"000000111110000011111000000", loomRowPegs:"000000111110000011111000000", pattern: [] }
-          assignmentPattern.pattern.push("00000010101000001010100000");
-          assignmentPattern.pattern.push("00000001010000000101000000");
-          assignmentPattern.pattern.push("00000010101000001010100000");
-          assignmentPattern.pattern.push("00000001010000000101000000");
-          assignmentPattern.pattern.push("00000010101000001010100000");
-          assignmentPattern.pattern.push("00000001010000000101000000");
+    var maxColorsIndex = 0;
+    for( peg = 0; peg < allPegs.length; peg++ ) {
+      if( allPegs[peg] > maxColorsIndex ) { maxColorsIndex = allPegs[peg]; }
+    }   
 
-          assignmentPattern.pattern.push("010101111111010111111101010");
-          assignmentPattern.pattern.push("101010111110101011111010101");
-          assignmentPattern.pattern.push("010101111111010111111101010");
-          assignmentPattern.pattern.push("101010111110101011111010101");
-          assignmentPattern.pattern.push("010101111111010111111101010");
-
-          assignmentPattern.pattern.push("00000010101000001010100000");
-          assignmentPattern.pattern.push("00000001010000000101000000");
-          assignmentPattern.pattern.push("00000010101000001010100000");
-          assignmentPattern.pattern.push("00000001010000000101000000");
-          assignmentPattern.pattern.push("00000010101000001010100000");
-
-          assignmentPattern.pattern.push("010101111111010111111101010");
-          assignmentPattern.pattern.push("101010111110101011111010101");
-          assignmentPattern.pattern.push("010101111111010111111101010");
-          assignmentPattern.pattern.push("101010111110101011111010101");
-          assignmentPattern.pattern.push("010101111111010111111101010");
-
-          assignmentPattern.pattern.push("00000010101000001010100000");
-          assignmentPattern.pattern.push("00000001010000000101000000");
-          assignmentPattern.pattern.push("00000010101000001010100000");
-          assignmentPattern.pattern.push("00000001010000000101000000");
-          assignmentPattern.pattern.push("00000010101000001010100000");
-          assignmentPattern.pattern.push("00000001010000000101000000");
-          break;
-
-        case ("loomPattern4"):
-          assignmentPattern = { loomColPegs:"001122", loomRowPegs:"001122", pattern: ["001020","000102","011121","101112","0212220","2021222"] };
-          break;
-
-        case ("loomPattern5"):
-          assignmentPattern = { loomColPegs:"0", loomRowPegs:"111222233334444555566667777", pattern: ["01", "10", "01", "02", "20", "02", "20", "03", "30", "03", "30", "04", "40", "04", "40", "05", "50", "05", "50", "06", "60", "06", "60", "07", "70", "07", "70" ] };
-          break;
-
-        case ("loomPattern6"):
-          assignmentPattern = { loomColPegs:"01", loomRowPegs:"01", pattern: ["0", "1"] };
-          break;
-
-        // case ("loomPattern7"):
-        //   assignmentPattern = { loomColPegs:"01234", loomRowPegs:"10432", pattern: ["012040003", "0103000204", "0420001034", "3133303234", "0222421232","1113101214","0020401030","41434042444","0323431333","2123202224"] };
-        //   break;
-
-        // case ("loomPattern8"):
-        //   assignmentPattern = { loomColPegs:"", loomRowPegs:"", pattern: ["", ""] };
-        //   break;
-
-        // case ("loomPattern9"):
-        //   assignmentPattern = { loomColPegs:"", loomRowPegs:"", pattern: ["", ""] };
-        //   break;
-
-        // case ("loomPattern10"):
-        //   assignmentPattern = { loomColPegs:"", loomRowPegs:"", pattern: ["", ""] };
-        //   break;
-
-        // case ("loomPattern11"):
-        //   assignmentPattern = { loomColPegs:"", loomRowPegs:"", pattern: ["", ""] };
-        //   break;
-
-        // case ("loomPattern12"):
-        //   assignmentPattern = { loomColPegs:"", loomRowPegs:"", pattern: ["", ""] };
-        //   break;
+    // Add Frames as needed
+    for( i = 0; i <= maxColorsIndex; i++ ) {
+      if(allFrames[i]) {
       }
-
-      var colorSelectorFrames = document.getElementById('colorSelectorFrames');
-      var allFrames = document.getElementsByClassName('colorSelectorFrame');
-      var allPegs = assignmentPattern.loomColPegs + assignmentPattern.loomRowPegs;
-
-      var maxColorsIndex = 0;
-      for( peg = 0; peg < allPegs.length; peg++ ) {
-        if( allPegs[peg] > maxColorsIndex ) { maxColorsIndex = allPegs[peg]; }
-      }   
-
-      // Add Frames as needed
-      for( i = 0; i <= maxColorsIndex; i++ ) {
-        if(allFrames[i]) {
-        }
-        else {
-          AddColorFrame(i+1);
-        }
+      else {
+        AddColorFrame(i+1);
       }
+    }
 
-      // Remove Extra Frames
-      // colorSelectorFrames = document.getElementById('colorSelectorFrames');
-      // for( i = allFrames.length; i >= 0 ; i-- ) {
-        // if(i <= parseInt(maxColorsIndex)+1 ) { }
-        // else {
-          // var extraFrame = document.getElementById('colorSelectorFrame'+ i);
-          // colorSelectorFrames.removeChild(extraFrame);
-        // }
+    // Remove Extra Frames
+    // colorSelectorFrames = document.getElementById('colorSelectorFrames');
+    // for( i = allFrames.length; i >= 0 ; i-- ) {
+      // if(i <= parseInt(maxColorsIndex)+1 ) { }
+      // else {
+        // var extraFrame = document.getElementById('colorSelectorFrame'+ i);
+        // colorSelectorFrames.removeChild(extraFrame);
       // }
+    // }
 
-    }
-    function onlyUnique(value, index, array) { return array.indexOf(value) === index; }
+  }
+  function onlyUnique(value, index, array) { return array.indexOf(value) === index; }
 
-    RedrawLoom(true);
-    CheckShopifyInventory();
-    document.getElementById('colorSelector1').click();
+  RedrawLoom(true);
+  CheckShopifyInventory();
+  document.getElementById('colorSelector1').click();
 </script>
