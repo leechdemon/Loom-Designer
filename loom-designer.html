@@ -1,9 +1,10 @@
 <style>
   #loomWrapper { width: 75%; margin: auto; display: flex; }
   @media only screen and (max-width: 1500px) { #loomWrapper { display: unset; } } 
-  #loomControls { float: left; width: 25%; margin: 1rem; }
+  #loomControls { float: left; width: 25%; margin: 1rem 0rem; }
   #loomControls p { margin-bottom: 0; }
   #loomDisplay { float: left; width: 60%; margin: 1rem; }
+  #loomDisplay:has( .loomItemHeight-27 ) { width: 80%; }
 
    /* @media only screen and (max-width: 1500px) {
     #loom { width: 100% !important; }
@@ -13,7 +14,8 @@
   } */
   
   
-    #colorSelectorFrames { display: flow-root; width: fit-content; margin: auto; min-height: 4.25rem; border: solid 2px #b8616e; padding: 0.5rem; color: #b8616e; }  
+    #colorSelectorFrames { display: flow-root; width: 580px; margin: auto; min-height: 4.25rem; border: solid 2px #b8616e; padding: 0.5rem; color: #b8616e; }  
+    #colorSelectorFrames:has( ~ #loom > .loomItemHeight-27 ) { width: 850px !important; }  
     #loom { clear: both; width: fit-content; margin: auto; }
     .closebox { background-color: white; border: solid 1px; width: 1.25rem; height: 1.25rem; line-height: normal; text-align: center; padding: 0px; transition-duration: 0.25s; margin-left: 1rem; color: black; opacity: 0; }
     .colorSelectorFrame:hover .closebox { opacity: 1; }
@@ -74,11 +76,11 @@
                 <div class="labelHide site-nav__link">Blue</div>
             </div>
 
-            <div id="colorSelectorItem3" class="colorSelectorItem" style="background-color: #38383a">
+            <div id="colorSelectorItem3" class="colorSelectorItem" style="background-color: #1c1c1c">
                 <div class="labelHide site-nav__link">Black</div>
             </div>
 
-            <div id="colorSelectorItem4" class="colorSelectorItem" style="background-color: #532025">
+            <div id="colorSelectorItem4" class="colorSelectorItem" style="background-color: #561519">
                 <div class="labelHide site-nav__link">Burgundy</div>
             </div>
 
@@ -94,7 +96,7 @@
                 <div class="labelHide site-nav__link">Chocolate</div>
             </div>
 
-            <div id="colorSelectorItem8" class="colorSelectorItem" style="background-color: #1c233e">
+            <div id="colorSelectorItem8" class="colorSelectorItem" style="background-color: #141466">
                 <div class="labelHide site-nav__link">Dark Navy</div>
             </div>
           </div>
@@ -108,7 +110,7 @@
                 <div class="labelHide site-nav__link">Green</div>
             </div>
 
-            <div id="colorSelectorItem11" class="colorSelectorItem" style="background-color: #b194c3">
+            <div id="colorSelectorItem11" class="colorSelectorItem" style="background-color: #aca4b2">
                 <div class="labelHide site-nav__link">Hydrangea</div>
             </div>
 
@@ -655,11 +657,11 @@
         product.id = "39980044517451";
         product.name = "Blue";
         break;
-      case (loomSize == 18) && (hexColor == "38383a"):
+      case (loomSize == 18) && (hexColor == "1c1c1c"):
         product.id = "39980044615755";
         product.name = "Black";
         break;
-      case (loomSize == 18) && (hexColor == "532025"):
+      case (loomSize == 18) && (hexColor == "561519"):
         product.id = "39980044681291";
         product.name = "Burgundy";
         break;
@@ -675,7 +677,7 @@
         product.id = "39980044845131";
         product.name = "Chocolate";
         break;
-      case (loomSize == 18) && (hexColor == "1c233e"):
+      case (loomSize == 18) && (hexColor == "141466"):
         product.id = "39980044943435";
         product.name = "Dark Navy";
         break;
@@ -688,7 +690,7 @@
         product.id = "39980045041739";
         product.name = "Green";
         break;
-      case (loomSize == 18) && (hexColor == "b194c3"):
+      case (loomSize == 18) && (hexColor == "aca4b2"):
         product.id = "39980045140043";
         product.name = "Hydrangea";
         break;
@@ -797,11 +799,11 @@
         product.id = "32648133738571";
         product.name = "Blue";
         break;
-      case (loomSize == 27) && (hexColor == "38383a"):
+      case (loomSize == 27) && (hexColor == "1c1c1c"):
         product.id = "32648134754379";
         product.name = "Black";
         break;
-      case (loomSize == 27) && (hexColor == "532025"):
+      case (loomSize == 27) && (hexColor == "561519"):
         product.id = "32648134164555";
         product.name = "Burgundy";
         break;
@@ -817,7 +819,7 @@
         product.id = "32648134295627";
         product.name = "Chocolate";
         break;
-      case (loomSize == 27) && (hexColor == "1c233e"):
+      case (loomSize == 27) && (hexColor == "141466"):
         product.id = "32648134230091";
         product.name = "Dark Navy";
         break;
@@ -830,7 +832,7 @@
         product.id = "32648133836875";
         product.name = "Green";
         break;
-      case (loomSize == 27) && (hexColor == "b194c3"):
+      case (loomSize == 27) && (hexColor == "aca4b2"):
         product.id = "32648134459467";
         product.name = "Hydrangea";
         break;
