@@ -23,7 +23,7 @@
     .colorSelectorFrame p { font-size: large; font-weight: 800; padding-left: 0.25rem; margin: 0 auto; color: black; }
   
     /* .colorSelectorFrame.item_instock button, .colorSelectorItem.item_instock { border: solid 5px green; } */
-    /* .colorSelectorFrame.item_oos button, */ .colorSelectorItem.item_oos { box-shadow: #ff000088 0 0 3px 3px; }
+    /* .colorSelectorFrame.item_oos button, */ .colorSelectorItem.item_oos { border: solid 3px #ff0000; }
     .colorSelectorFrame.item_unchecked button, .colorSelectorItem.item_unchecked { border: solid 5px blue; }
     #colorSelectorFrame_oos { float: left; background-color: #ff000033; padding: 8px; margin-top: 8px; border: solid 2px red; }
 
@@ -59,7 +59,7 @@
 
 </style>
 <script>
-  var version = "0.2.5c";
+  var version = "0.2.6";
   console.log("Loom Designer v" + version);
 </script>
 
@@ -441,9 +441,11 @@
         }
       }
 
-      /* Force OOS (for testing) */
-      { allColorSelectorItems[4].classList.add('item_oos'); }
-      { allColorSelectorItems[5].classList.add('item_oos'); }
+        /* Force OOS (for testing) */
+        allColorSelectorItems[3].classList.add('item_oos');
+        allColorSelectorItems[4].classList.add('item_oos');
+        allColorSelectorItems[23].classList.add('item_oos');
+        allColorSelectorItems[31].classList.add('item_oos');
     }
   function FillLoom() {
     var colorId = document.getElementsByClassName('highlighted')[0].id.replace('colorSelectorFrame','');
