@@ -10,6 +10,7 @@
     #loom { width: 100% !important; }
     #loomControls { width: 90% !important; }
     .loomItemWidth-18 { width: 20px !important; height: 20px !important; }
+    .loomItemWidth-19 { width: 18px !important; height: 18px !important; }
     .loomItemWidth-27 { width: 12px !important; height: 12px !important; }
   } */
   
@@ -50,6 +51,7 @@
     .loomRow { clear: both; }
 
     .loomItemWidth-18 { width: 30px; height: 30px; }
+    .loomItemWidth-19 { width: 30px; height: 30px; }
     .loomItemWidth-27 { width: 30px; height: 30px; }
     .item_direction, .inset_label { font-size: large; }
 
@@ -59,7 +61,7 @@
 
 </style>
 <script>
-  var version = "0.2.6";
+  var version = "0.2.7";
   console.log("Loom Designer v" + version);
 </script>
 
@@ -230,8 +232,9 @@
 
         <div class="buttonRow">
             <p><strong>Loom Selector</strong></p>
-            <button id="loomSize-18" class="btn btn--small" onclick="javascript:LoomSize(18);" style="background-color: #ed7b5a">Traditional Size</button>
-            <button id="loomSize-27" class="btn btn--small" onclick="javascript:LoomSize(27);" style="background-color: #aaaaaa">PRO Size</button>
+            <button id="loomSize-18" class="btn btn--small" onclick="javascript:LoomSize(18);" style="background-color: #ed7b5a">7" - 18-Peg Traditional Size</button>
+            <button id="loomSize-19" class="btn btn--small" onclick="javascript:LoomSize(19);" style="background-color: #aaaaaa">7" - 19-peg Traditional Size</button>
+            <button id="loomSize-27" class="btn btn--small" onclick="javascript:LoomSize(27);" style="background-color: #aaaaaa">10"- PRO Size</button>
         </div>
       
         <div class="buttonRow" style="display: none;">
@@ -393,6 +396,7 @@
     function CheckShopifyInventory() {
       var productTitle = 'blank';
       if( loomSize == 18 ) { productTitle = productTitle7; }
+      if( loomSize == 19 ) { productTitle = productTitle7; }
       if( loomSize == 27 ) { productTitle = productTitle10; }
 
       fetch(window.Shopify.routes.root + 'products/'+productTitle+'.js')
@@ -442,10 +446,10 @@
       }
 
         /* Force OOS (for testing) */
-        allColorSelectorItems[3].classList.add('item_oos');
-        allColorSelectorItems[4].classList.add('item_oos');
-        allColorSelectorItems[23].classList.add('item_oos');
-        allColorSelectorItems[31].classList.add('item_oos');
+        // allColorSelectorItems[3].classList.add('item_oos');
+        // allColorSelectorItems[4].classList.add('item_oos');
+        // allColorSelectorItems[23].classList.add('item_oos');
+        // allColorSelectorItems[31].classList.add('item_oos');
     }
   function FillLoom() {
     var colorId = document.getElementsByClassName('highlighted')[0].id.replace('colorSelectorFrame','');
@@ -651,143 +655,143 @@
     // Use Hex to determine correct product variants
     switch( true ) {
       //7" Loom
-      case (loomSize == 18) && (hexColor == "887255"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "887255"):
         product.id = "39980044451915";
         product.name = "Autumn";
         break;
-      case (loomSize == 18) && (hexColor == "213996"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "213996"):
         product.id = "39980044517451";
         product.name = "Blue";
         break;
-      case (loomSize == 18) && (hexColor == "1c1c1c"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "1c1c1c"):
         product.id = "39980044615755";
         product.name = "Black";
         break;
-      case (loomSize == 18) && (hexColor == "561519"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "561519"):
         product.id = "39980044681291";
         product.name = "Burgundy";
         break;
-      case (loomSize == 18) && (hexColor == "f57b99"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "f57b99"):
         product.id = "39980044714059";
         product.name = "Carnation";
         break;
-      case (loomSize == 18) && (hexColor == "fbed94"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "fbed94"):
         product.id = "39980044746827";
         product.name = "Daffodil";
         break;
-      case (loomSize == 18) && (hexColor == "3c1d14"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "3c1d14"):
         product.id = "39980044845131";
         product.name = "Chocolate";
         break;
-      case (loomSize == 18) && (hexColor == "141466"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "141466"):
         product.id = "39980044943435";
         product.name = "Dark Navy";
         break;
 
-      case (loomSize == 18) && (hexColor == "d7c8a9"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "d7c8a9"):
         product.id = "39980045008971";
         product.name = "Flax";
         break;
-      case (loomSize == 18) && (hexColor == "0e6f2e"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "0e6f2e"):
         product.id = "39980045041739";
         product.name = "Green";
         break;
-      case (loomSize == 18) && (hexColor == "aca4b2"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "aca4b2"):
         product.id = "39980045140043";
         product.name = "Hydrangea";
         break;
-      case (loomSize == 18) && (hexColor == "b0d947"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "b0d947"):
         product.id = "39980045205579";
         product.name = "Lime";
         break;
-      case (loomSize == 18) && (hexColor == "859855"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "859855"):
         product.id = "39980045271115";
         product.name = "Leaf";
         break;
-      case (loomSize == 18) && (hexColor == "9a86b8"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "9a86b8"):
         product.id = "39980045303883";
         product.name = "Lavender";
         break;
-      case (loomSize == 18) && (hexColor == "d74d21"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "d74d21"):
         product.id = "39980045631563";
         product.name = "Orange";
         break;
-      case (loomSize == 18) && (hexColor == "775d2d"):
+      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "775d2d"):
         product.id = "39980045434955";
         product.name = "Ochre";
         break;
 
-      case (loomSize == 18) && (hexColor == "4d1e96"):
+      case (loomSize == 18  || loomSize == 19) && (hexColor == "4d1e96"):
         product.id = "39980045926475";
         product.name = "Purple";
         break;
-      case (loomSize == 18) && (hexColor == "92b6cb"):
+      case (loomSize == 18  || loomSize == 19) && (hexColor == "92b6cb"):
         product.id = "39980045992011";
         product.name = "Powder Blue";
         break;
-      case (loomSize == 18) && (hexColor == "04897f"):
+      case (loomSize == 18  || loomSize == 19) && (hexColor == "04897f"):
         product.id = "39980046024779";
         product.name = "Peacock";
         break;
-      case (loomSize == 18) && (hexColor == "8c2f9a"):
+      case (loomSize == 18  || loomSize == 19) && (hexColor == "8c2f9a"):
         product.id = "39980046221387";
         product.name = "Plum";
         break;
-      case (loomSize == 18) && (hexColor == "04322c"):
+      case (loomSize == 18  || loomSize == 19) && (hexColor == "04322c"):
         product.id = "39980046319691";
         product.name = "Pine";
         break;
-      case (loomSize == 18) && (hexColor == "f840ab"):
+      case ( loomSize == 18 || loomSize == 19) && (hexColor == "f840ab"):
         product.id = "39980046090315";
         product.name = "Pink";
         break;
-      case (loomSize == 18) && (hexColor == "53545a"):
+      case ( loomSize == 18 || loomSize == 19) && (hexColor == "53545a"):
         product.id = "39980046352459";
         product.name = "Pewter";
         break;
-      case (loomSize == 18) && (hexColor == "971524"):
+      case ( loomSize == 18 || loomSize == 19) && (hexColor == "971524"):
         product.id = "39980046385227";
         product.name = "Red";
         break;
 
-      case (loomSize == 18) && (hexColor == "5ba9c4"):
+      case ( loomSize == 18 || loomSize == 19) && (hexColor == "5ba9c4"):
         product.id = "39980046417995";
         product.name = "Robin's Egg";
         break;
-      case (loomSize == 18) && (hexColor == "e95f5f"):
+      case ( loomSize == 18 || loomSize == 19) && (hexColor == "e95f5f"):
         product.id = "39980046483531";
         product.name = "Salmon";
         break;
-      case (loomSize == 18) && (hexColor == "984e38"):
+      case ( loomSize == 18 || loomSize == 19) && (hexColor == "984e38"):
         product.id = "39980046516299";
         product.name = "Spice";
         break;
-      case (loomSize == 18) && (hexColor == "a5a5a8"):
+      case ( loomSize == 18 || loomSize == 19) && (hexColor == "a5a5a8"):
         product.id = "39980046549067";
         product.name = "Silver";
         break;
-      case (loomSize == 18) && (hexColor == "06a0cd"):
+      case ( loomSize == 18 || loomSize == 19) && (hexColor == "06a0cd"):
         product.id = "39980046581835";
         product.name = "Turquoise";
         break;
-      case (loomSize == 18) && (hexColor == "e1723b"):
+      case ( loomSize == 18 || loomSize == 19) && (hexColor == "e1723b"):
         product.id = "39980046647371";
         product.name = "Tiger Lily";
         break;
-      case (loomSize == 18) && (hexColor == "fefefe"):
+      case ( loomSize == 18 || loomSize == 19) && (hexColor == "fefefe"):
         product.id = "39980046712907";
         product.name = "White";
         break;
-      case (loomSize == 18) && (hexColor == "445041"):
+      case ( loomSize == 18 || loomSize == 19) && (hexColor == "445041"):
         product.id = "39980046745675";
         product.name = "Willow";
         break;
 
-      case (loomSize == 18) && (hexColor == "fdf5e9"):
+      case ( loomSize == 18 || loomSize == 19) && (hexColor == "fdf5e9"):
         product.id = "39980046811211";
         product.name = "Winter White";
         break;
-      case (loomSize == 18) && (hexColor == "f3b814"):
+      case ( loomSize == 18 || loomSize == 19) && (hexColor == "f3b814"):
         product.id = "39980046843979";
         product.name = "Yellow";
         break;
@@ -946,6 +950,7 @@
     RedrawLoom(true);
 
     document.getElementById('loomSize-18').style.backgroundColor = '#aaaaaa';
+    document.getElementById('loomSize-19').style.backgroundColor = '#aaaaaa';
     document.getElementById('loomSize-27').style.backgroundColor = '#aaaaaa';
     document.getElementById('loomSize-' + size).style.backgroundColor = '#ed7b5a';
 
