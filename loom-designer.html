@@ -1,3 +1,177 @@
+<script>
+  var loomColors = [ {
+    "hex": "887255",
+    "name": "Autumn",
+    "id_18": "39980044451915",
+    "id_27": "32648134099019"
+  }, {
+    "hex": "213996",
+    "name": "Blue",
+    "id_18": "39980044517451",
+    "id_27": "32648133738571"
+  }, {
+    "hex": "1c1c1c",
+    "name": "Black",
+    "id_18": "39980044615755",
+    "id_27": "32648134754379"
+  }, {
+    "hex": "561519",
+    "name": "Burgundy",
+    "id_18": "39980044681291",
+    "id_27": "32648134164555"
+  }, {
+    "hex": "f57b99",
+    "name": "Carnation",
+    "id_18": "39980044714059",
+    "id_27": "32648134688843"
+  }, {
+    "hex": "fbed94",
+    "name": "Daffodil",
+    "id_18": "39980044746827",
+    "id_27": "32648134590539"
+  }, {
+    "hex": "3c1d14",
+    "name": "Chocolate",
+    "id_18": "39980044845131",
+    "id_27": "32648134295627"
+  }, {
+    "hex": "141466",
+    "name": "Dark Navy",
+    "id_18": "39980044943435",
+    "id_27": "32648134230091"
+  }, {
+    "hex": "d7c8a9",
+    "name": "Flax",
+    "id_18": "39980045008971",
+    "id_27": "32648134361163"
+  }, {
+    "hex": "0e6f2e",
+    "name": "Green",
+    "id_18": "39980045041739",
+    "id_27": "32648133836875"
+  }, {
+    "hex": "aca4b2",
+    "name": "Hydrangea",
+    "id_18": "39980045140043",
+    "id_27": "32648134459467"
+  }, {
+    "hex": "b0d947",
+    "name": "Lime",
+    "id_18": "39980045205579",
+    "id_27": "32648133869643"
+  }, {
+    "hex": "859855",
+    "name": "Leaf",
+    "id_18": "39980045271115",
+    "id_27": "32648134492235"
+  }, {
+    "hex": "9a86b8",
+    "name": "Lavender",
+    "id_18": "39980045303883",
+    "id_27": "32648134525003"
+  }, {
+    "hex": "d74d21",
+    "name": "Orange",
+    "id_18": "39980045631563",
+    "id_27": "32648133935179"
+  }, {
+    "hex": "775d2d",
+    "name": "Ochre",
+    "id_18": "39980045434955",
+    "id_27": "32648134328395"
+  }, {
+    "hex": "4d1e96",
+    "name": "Purple",
+    "id_18": "39980045926475",
+    "id_27": "32648133673035"
+  }, {
+    "hex": "92b6cb",
+    "name": "Powder Blue",
+    "id_18": "39980045992011",
+    "id_27": "32648134721611"
+  }, {
+    "hex": "04897f",
+    "name": "Peacock",
+    "id_18": "39980046024779",
+    "id_27": "32648133804107"
+  }, {
+    "hex": "8c2f9a",
+    "name": "Plum",
+    "id_18": "39980046221387",
+    "id_27": "32648133705803"
+  }, {
+    "hex": "04322c",
+    "name": "Pine",
+    "id_18": "39980046319691",
+    "id_27": "32648134426699"
+  }, {
+    "hex": "f840ab",
+    "name": "Pink",
+    "id_18": "39980046090315",
+    "id_27": "32648134000715"
+  }, {
+    "hex": "53545a",
+    "name": "Pewter",
+    "id_18": "39980046352459",
+    "id_27": "32648134262859"
+  }, {
+    "hex": "971524",
+    "name": "Red",
+    "id_18": "39980046385227",
+    "id_27": "32648133967947"
+  }, {
+    "hex": "5ba9c4",
+    "name": "Robin's Egg",
+    "id_18": "39980046417995",
+    "id_27": "32648134557771"
+  }, {
+    "hex": "e95f5f",
+    "name": "Salmon",
+    "id_18": "39980046483531",
+    "id_27": "32648134033483"
+  }, {
+    "hex": "984e38",
+    "name": "Spice",
+    "id_18": "39980046516299",
+    "id_27": "32648134393931"
+  }, {
+    "hex": "a5a5a8",
+    "name": "Silver",
+    "id_18": "39980046549067",
+    "id_27": "32648134066251"
+  }, {
+    "hex": "06a0cd",
+    "name": "Turquoise",
+    "id_18": "39980046581835",
+    "id_27": "32648133771339"
+  }, {
+    "hex": "e1723b",
+    "name": "Tiger Lily",
+    "id_18": "39980046647371",
+    "id_27": "32648134623307"
+  }, {
+    "hex": "fefefe",
+    "name": "White",
+    "id_18": "39980046712907",
+    "id_27": "32648134656075"
+  }, {
+    "hex": "445041",
+    "name": "Willow",
+    "id_18": "39980046745675",
+    "id_27": "32648134131787"
+  }, {
+    "hex": "fdf5e9",
+    "name": "Winter White",
+    "id_18": "39980046811211",
+    "id_27": "32648134197323"
+  }, {
+    "hex": "f3b814",
+    "name": "Yellow",
+    "id_18": "39980046843979",
+    "id_27": "32648133902411"
+  } ];
+</script>
+
 <style>
   #loomWrapper { width: 75%; margin: auto; display: flex; }
   @media only screen and (max-width: 1500px) { #loomWrapper { display: unset; } } 
@@ -61,161 +235,45 @@
 
 </style>
 <script>
-  var version = "0.2.7";
+  var version = "0.3.0";
   console.log("Loom Designer v" + version);
 </script>
+
 
 <div id="loomWrapper">
     <div id="loomControls">
         <div id="colorSelectorRow" class="">
           <p><strong>Color Swatches</strong></p>
-          <div class="clearRow">
-            <div id="colorSelectorItem1" class="colorSelectorItem" style="background-color: #887255">
-                <div class="labelHide site-nav__link">Autumn</div>
-            </div>
-
-            <div id="colorSelectorItem2" class="colorSelectorItem" style="background-color: #213996">
-                <div class="labelHide site-nav__link">Blue</div>
-            </div>
-
-            <div id="colorSelectorItem3" class="colorSelectorItem" style="background-color: #1c1c1c">
-                <div class="labelHide site-nav__link">Black</div>
-            </div>
-
-            <div id="colorSelectorItem4" class="colorSelectorItem" style="background-color: #561519">
-                <div class="labelHide site-nav__link">Burgundy</div>
-            </div>
-
-            <div id="colorSelectorItem5" class="colorSelectorItem" style="background-color: #f57b99">
-                <div class="labelHide site-nav__link">Carnation</div>
-            </div>
-
-            <div id="colorSelectorItem6" class="colorSelectorItem" style="background-color: #fbed94">
-                <div class="labelHide site-nav__link">Daffodil</div>
-            </div>
-
-            <div id="colorSelectorItem7" class="colorSelectorItem" style="background-color: #3c1d14">
-                <div class="labelHide site-nav__link">Chocolate</div>
-            </div>
-
-            <div id="colorSelectorItem8" class="colorSelectorItem" style="background-color: #141466">
-                <div class="labelHide site-nav__link">Dark Navy</div>
-            </div>
-          </div>
-
-          <div class="clearRow">
-            <div id="colorSelectorItem9" class="colorSelectorItem" style="background-color: #d7c8a9">
-                <div class="labelHide site-nav__link">Flax</div>
-            </div>
-
-            <div id="colorSelectorItem10" class="colorSelectorItem" style="background-color: #0e6f2e">
-                <div class="labelHide site-nav__link">Green</div>
-            </div>
-
-            <div id="colorSelectorItem11" class="colorSelectorItem" style="background-color: #aca4b2">
-                <div class="labelHide site-nav__link">Hydrangea</div>
-            </div>
-
-            <div id="colorSelectorItem12" class="colorSelectorItem" style="background-color: #b0d947">
-                <div class="labelHide site-nav__link">Lime</div>
-            </div>
-
-            <div id="colorSelectorItem13" class="colorSelectorItem" style="background-color: #859855">
-                <div class="labelHide site-nav__link">Leaf</div>
-            </div>
-
-            <div id="colorSelectorItem14" class="colorSelectorItem" style="background-color: #9a86b8">
-                <div class="labelHide site-nav__link">Lavender</div>
-            </div>
-
-            <div id="colorSelectorItem15" class="colorSelectorItem" style="background-color: #d74d21">
-                <div class="labelHide site-nav__link">Orange</div>
-            </div>
-
-            <div id="colorSelectorItem16" class="colorSelectorItem" style="background-color: #775d2d">
-                <div class="labelHide site-nav__link">Ochre</div>
-            </div>
-          </div>
-
-          <div class="clearRow">
-            <div id="colorSelectorItem17" class="colorSelectorItem" style="background-color: #4d1e96">
-                <div class="labelHide site-nav__link">Purple</div>
-            </div>
-
-            <div id="colorSelectorItem18" class="colorSelectorItem" style="background-color: #92b6cb">
-                <div class="labelHide site-nav__link">Powder Blue</div>
-            </div>
-
-            <div id="colorSelectorItem19" class="colorSelectorItem" style="background-color: #04897f">
-                <div class="labelHide site-nav__link">Peacock</div>
-            </div>
-
-            <div id="colorSelectorItem20" class="colorSelectorItem" style="background-color: #8c2f9a">
-                <div class="labelHide site-nav__link">Plum</div>
-            </div>
-
-            <div id="colorSelectorItem21" class="colorSelectorItem" style="background-color: #04322c">
-                <div class="labelHide site-nav__link">Pine</div>
-            </div>
-
-            <div id="colorSelectorItem22" class="colorSelectorItem" style="background-color: #f840ab">
-                <div class="labelHide site-nav__link">Pink</div>
-            </div>
-
-            <div id="colorSelectorItem23" class="colorSelectorItem" style="background-color: #53545a">
-                <div class="labelHide site-nav__link">Pewter</div>
-            </div>
-
-            <div id="colorSelectorItem24" class="colorSelectorItem" style="background-color: #971524">
-                <div class="labelHide site-nav__link">Red</div>
-            </div>
-          </div>
-
-          <div class="clearRow">
-            <div id="colorSelectorItem25" class="colorSelectorItem" style="background-color: #5ba9c4">
-                <div class="labelHide site-nav__link">Robin's Egg</div>
-            </div>
-
-            <div id="colorSelectorItem26" class="colorSelectorItem" style="background-color: #e95f5f">
-                <div class="labelHide site-nav__link">Salmon</div>
-            </div>
-
-            <div id="colorSelectorItem27" class="colorSelectorItem" style="background-color: #984e38">
-                <div class="labelHide site-nav__link">Spice</div>
-            </div>
-
-            <div id="colorSelectorItem28" class="colorSelectorItem" style="background-color: #a5a5a8">
-                <div class="labelHide site-nav__link">Silver</div>
-            </div>
-
-            <div id="colorSelectorItem29" class="colorSelectorItem" style="background-color: #06a0cd">
-                <div class="labelHide site-nav__link">Turquoise</div>
-            </div>
-
-            <div id="colorSelectorItem30" class="colorSelectorItem" style="background-color: #e1723b">
-                <div class="labelHide site-nav__link">Tiger Lily</div>
-            </div>
-
-            <div id="colorSelectorItem31" class="colorSelectorItem" style="background-color: #fefefe">
-                <div class="labelHide site-nav__link">White</div>
-            </div>
-
-            <div id="colorSelectorItem32" class="colorSelectorItem" style="background-color: #445041">
-                <div class="labelHide site-nav__link">Willow</div>
-            </div>
-          </div>
-
-          <div class="clearRow">
-            <div id="colorSelectorItem33" class="colorSelectorItem" style="background-color: #fdf5e9">
-                <div class="labelHide site-nav__link">Winter White</div>
-            </div>
-
-            <div id="colorSelectorItem34" class="colorSelectorItem" style="background-color: #f3b814">
-                <div class="labelHide site-nav__link">Yellow</div>
-            </div>
-          </div>
         </div>
 
+        {% include 'loom-designer-colors' %}
+        <script>
+          /* Dynmaically add Color Selectors */
+          var grandparent = document.getElementById('colorSelectorRow');
+          var clearRowId = '';
+          for( var x = 0; x < loomColors.length; x++ ) {
+            if( x % 8 === 0 ) {
+              var parent = document.createElement("div");
+              parent.classList.add('clearRow');
+              parent.id = "clearRow" + x;
+              clearRowId = parent.id;
+              grandparent.appendChild(parent);
+            }
+            
+            var child = document.createElement("div");
+            child.id = "colorSelectorItem" + (x+1);
+            child.classList.add('colorSelectorItem');
+            child.style.backgroundColor = "#" + loomColors[x].hex;
+            document.getElementById( clearRowId ).appendChild(child);
+        
+            var label = document.createElement("div");
+            label.id = "colorSelectorItem" + (x+1);
+            label.classList.add('labelHide', 'site-nav__link');
+            label.innerHTML = loomColors[x].name;
+            child.appendChild(label);
+          }
+        </script>
+      
         <!-- <div class="buttonRow">
             <input type="checkbox" id="RedrawLoomOnColorChange">
             <label for="RedrawLoomOnColorChange" style="float: right; width: 90%;">Redraw Loom on Color Change</label>
@@ -418,7 +476,6 @@
       for( var x = 0; x < allColorSelectorItems.length; x++ ) {
         /* For each colorSelectorItem swatch, get the productId */
         var thisProductId = GetProductFromRGB( allColorSelectorItems[x].style.backgroundColor ).id;
-        
         /* For each product, if the productId matches the current Div's productId... */
         for( var v = 0; v < product.variants.length; v++ ) {
           
@@ -651,292 +708,13 @@
         hexColor = '0' + hexColor;
       }
     }
-    
-    // Use Hex to determine correct product variants
-    switch( true ) {
-      //7" Loom
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "887255"):
-        product.id = "39980044451915";
-        product.name = "Autumn";
-        break;
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "213996"):
-        product.id = "39980044517451";
-        product.name = "Blue";
-        break;
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "1c1c1c"):
-        product.id = "39980044615755";
-        product.name = "Black";
-        break;
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "561519"):
-        product.id = "39980044681291";
-        product.name = "Burgundy";
-        break;
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "f57b99"):
-        product.id = "39980044714059";
-        product.name = "Carnation";
-        break;
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "fbed94"):
-        product.id = "39980044746827";
-        product.name = "Daffodil";
-        break;
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "3c1d14"):
-        product.id = "39980044845131";
-        product.name = "Chocolate";
-        break;
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "141466"):
-        product.id = "39980044943435";
-        product.name = "Dark Navy";
-        break;
 
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "d7c8a9"):
-        product.id = "39980045008971";
-        product.name = "Flax";
-        break;
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "0e6f2e"):
-        product.id = "39980045041739";
-        product.name = "Green";
-        break;
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "aca4b2"):
-        product.id = "39980045140043";
-        product.name = "Hydrangea";
-        break;
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "b0d947"):
-        product.id = "39980045205579";
-        product.name = "Lime";
-        break;
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "859855"):
-        product.id = "39980045271115";
-        product.name = "Leaf";
-        break;
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "9a86b8"):
-        product.id = "39980045303883";
-        product.name = "Lavender";
-        break;
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "d74d21"):
-        product.id = "39980045631563";
-        product.name = "Orange";
-        break;
-      case (loomSize == 18  || loomSize == 19 ) && (hexColor == "775d2d"):
-        product.id = "39980045434955";
-        product.name = "Ochre";
-        break;
-
-      case (loomSize == 18  || loomSize == 19) && (hexColor == "4d1e96"):
-        product.id = "39980045926475";
-        product.name = "Purple";
-        break;
-      case (loomSize == 18  || loomSize == 19) && (hexColor == "92b6cb"):
-        product.id = "39980045992011";
-        product.name = "Powder Blue";
-        break;
-      case (loomSize == 18  || loomSize == 19) && (hexColor == "04897f"):
-        product.id = "39980046024779";
-        product.name = "Peacock";
-        break;
-      case (loomSize == 18  || loomSize == 19) && (hexColor == "8c2f9a"):
-        product.id = "39980046221387";
-        product.name = "Plum";
-        break;
-      case (loomSize == 18  || loomSize == 19) && (hexColor == "04322c"):
-        product.id = "39980046319691";
-        product.name = "Pine";
-        break;
-      case ( loomSize == 18 || loomSize == 19) && (hexColor == "f840ab"):
-        product.id = "39980046090315";
-        product.name = "Pink";
-        break;
-      case ( loomSize == 18 || loomSize == 19) && (hexColor == "53545a"):
-        product.id = "39980046352459";
-        product.name = "Pewter";
-        break;
-      case ( loomSize == 18 || loomSize == 19) && (hexColor == "971524"):
-        product.id = "39980046385227";
-        product.name = "Red";
-        break;
-
-      case ( loomSize == 18 || loomSize == 19) && (hexColor == "5ba9c4"):
-        product.id = "39980046417995";
-        product.name = "Robin's Egg";
-        break;
-      case ( loomSize == 18 || loomSize == 19) && (hexColor == "e95f5f"):
-        product.id = "39980046483531";
-        product.name = "Salmon";
-        break;
-      case ( loomSize == 18 || loomSize == 19) && (hexColor == "984e38"):
-        product.id = "39980046516299";
-        product.name = "Spice";
-        break;
-      case ( loomSize == 18 || loomSize == 19) && (hexColor == "a5a5a8"):
-        product.id = "39980046549067";
-        product.name = "Silver";
-        break;
-      case ( loomSize == 18 || loomSize == 19) && (hexColor == "06a0cd"):
-        product.id = "39980046581835";
-        product.name = "Turquoise";
-        break;
-      case ( loomSize == 18 || loomSize == 19) && (hexColor == "e1723b"):
-        product.id = "39980046647371";
-        product.name = "Tiger Lily";
-        break;
-      case ( loomSize == 18 || loomSize == 19) && (hexColor == "fefefe"):
-        product.id = "39980046712907";
-        product.name = "White";
-        break;
-      case ( loomSize == 18 || loomSize == 19) && (hexColor == "445041"):
-        product.id = "39980046745675";
-        product.name = "Willow";
-        break;
-
-      case ( loomSize == 18 || loomSize == 19) && (hexColor == "fdf5e9"):
-        product.id = "39980046811211";
-        product.name = "Winter White";
-        break;
-      case ( loomSize == 18 || loomSize == 19) && (hexColor == "f3b814"):
-        product.id = "39980046843979";
-        product.name = "Yellow";
-        break;
-
-      // 10" Loom
-      case (loomSize == 27) && (hexColor == "887255"):
-        product.id = "32648134099019";
-        product.name = "Autumn";
-        break;
-      case (loomSize == 27) && (hexColor == "213996"):
-        product.id = "32648133738571";
-        product.name = "Blue";
-        break;
-      case (loomSize == 27) && (hexColor == "1c1c1c"):
-        product.id = "32648134754379";
-        product.name = "Black";
-        break;
-      case (loomSize == 27) && (hexColor == "561519"):
-        product.id = "32648134164555";
-        product.name = "Burgundy";
-        break;
-      case (loomSize == 27) && (hexColor == "f57b99"):
-        product.id = "32648134688843";
-        product.name = "Carnation";
-        break;
-      case (loomSize == 27) && (hexColor == "fbed94"):
-        product.id = "32648134590539";
-        product.name = "Daffodil";
-        break;
-      case (loomSize == 27) && (hexColor == "3c1d14"):
-        product.id = "32648134295627";
-        product.name = "Chocolate";
-        break;
-      case (loomSize == 27) && (hexColor == "141466"):
-        product.id = "32648134230091";
-        product.name = "Dark Navy";
-        break;
-
-      case (loomSize == 27) && (hexColor == "d7c8a9"):
-        product.id = "32648134361163";
-        product.name = "Flax";
-        break;
-      case (loomSize == 27) && (hexColor == "0e6f2e"):
-        product.id = "32648133836875";
-        product.name = "Green";
-        break;
-      case (loomSize == 27) && (hexColor == "aca4b2"):
-        product.id = "32648134459467";
-        product.name = "Hydrangea";
-        break;
-      case (loomSize == 27) && (hexColor == "b0d947"):
-        product.id = "32648133869643";
-        product.name = "Lime";
-        break;
-      case (loomSize == 27) && (hexColor == "859855"):
-        product.id = "32648134492235";
-        product.name = "Leaf";
-        break;
-      case (loomSize == 27) && (hexColor == "9a86b8"):
-        product.id = "32648134525003";
-        product.name = "Lavender";
-        break;
-      case (loomSize == 27) && (hexColor == "d74d21"):
-        product.id = "32648133935179";
-        product.name = "Orange";
-        break;
-      case (loomSize == 27) && (hexColor == "775d2d"):
-        product.id = "32648134328395";
-        product.name = "Ochre";
-        break;
-
-      case (loomSize == 27) && (hexColor == "4d1e96"):
-        product.id = "32648133673035";
-        product.name = "Purple";
-        break;
-      case (loomSize == 27) && (hexColor == "92b6cb"):
-        product.id = "32648134721611";
-        product.name = "Powder Blue";
-        break;
-      case (loomSize == 27) && (hexColor == "04897f"):
-        product.id = "32648133804107";
-        product.name = "Peacock";
-        break;
-      case (loomSize == 27) && (hexColor == "8c2f9a"):
-        product.id = "32648133705803";
-        product.name = "Plum";
-        break;
-      case (loomSize == 27) && (hexColor == "04322c"):
-        product.id = "32648134426699";
-        product.name = "Pine";
-        break;
-      case (loomSize == 27) && (hexColor == "f840ab"):
-        product.id = "32648134000715";
-        product.name = "Pink";
-        break;
-      case (loomSize == 27) && (hexColor == "53545a"):
-        product.id = "32648134262859";
-        product.name = "Pewter";
-        break;
-      case (loomSize == 27) && (hexColor == "971524"):
-        product.id = "32648133967947";
-        product.name = "Red";
-        break;
-
-      case (loomSize == 27) && (hexColor == "5ba9c4"):
-        product.id = "32648134557771";
-        product.name = "Robin's Egg";
-        break;
-      case (loomSize == 27) && (hexColor == "e95f5f"):
-        product.id = "32648134033483";
-        product.name = "Salmon";
-        break;
-      case (loomSize == 27) && (hexColor == "984e38"):
-        product.id = "32648134393931";
-        product.name = "Spice";
-        break;
-      case (loomSize == 27) && (hexColor == "a5a5a8"):
-        product.id = "32648134066251";
-        product.name = "Silver";
-        break;
-      case (loomSize == 27) && (hexColor == "06a0cd"):
-        product.id = "32648133771339";
-        product.name = "Turquoise";
-        break;
-      case (loomSize == 27) && (hexColor == "e1723b"):
-        product.id = "32648134623307";
-        product.name = "Tiger Lily";
-        break;
-      case (loomSize == 27) && (hexColor == "fefefe"):
-        product.id = "32648134656075";
-        product.name = "White";
-        break;
-      case (loomSize == 27) && (hexColor == "445041"):
-        product.id = "32648134131787";
-        product.name = "Willow";
-        break;
-        
-      case (loomSize == 27) && (hexColor == "fdf5e9"):
-        product.id = "32648134197323";
-        product.name = "Winter White";
-        break;
-      case (loomSize == 27) && (hexColor == "f3b814"):
-        product.id = "32648133902411";
-        product.name = "Yellow";
-        break;
+    for( var x = 0; x < loomColors.length; x++ ) {
+      if( loomColors[x].hex == hexColor ) {
+        product.name = loomColors[x].name;
+        if( loomSize == 18 || loomSize == 19 ) { product.id = loomColors[x].id_18; }
+        if( loomSize == 27 ) { product.id = loomColors[x].id_27; }
+      }
     }
     
     return product;
